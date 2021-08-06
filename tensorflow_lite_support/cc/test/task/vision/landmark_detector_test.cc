@@ -73,32 +73,7 @@ StatusOr<ImageData> LoadImage(std::string image_name) {
                                       kTestDataDirectory, image_name));
 }
 
-class MobileNetQuantizedOpResolver : public ::tflite::MutableOpResolver {
- public:
-  MobileNetQuantizedOpResolver() {
-    
-    AddBuiltin(::tflite::BuiltinOperator_SUB
-               ::tflite::ops::builtin::Register_SUB());
-		AddBuiltin(::tflite::BuiltinOperator_MUL,
-               ::tflite::ops::builtin::Register_MUL());
-		AddBuiltin(::tflite::BuiltinOperator_CONV_2D,
-               ::tflite::ops::builtin::Register_CONV_2D());
-    AddBuiltin(::tflite::BuiltinOperator_DEPTHWISE_CONV_2D,
-               ::tflite::ops::builtin::Register_DEPTHWISE_CONV_2D());
-		AddBuiltin(::tflite::BuiltinOperator_ADD,
-               ::tflite::ops::builtin::Register_ADD());
-		AddBuiltin(::tflite::BuiltinOperator_RESIZE_BILINEAR,
-               ::tflite::ops::builtin::Register_RESIZE_BILINEAR());
-		AddBuiltin(::tflite::BuiltinOperator_LOGISTIC,
-               ::tflite::ops::builtin::Register_LOGISTIC());
-		AddBuiltin(::tflite::BuiltinOperator_RESHAPE,
-               ::tflite::ops::builtin::Register_RESHAPE());
-		AddBuiltin(::tflite::BuiltinOperator_CONCATENATION,
-               ::tflite::ops::builtin::Register_CONCATENATION());
-		}
 
-  MobileSsdQuantizedOpResolver(const MobileSsdQuantizedOpResolver& r) = delete;
-};
 
 class CreateFromOptionsTest : public tflite_shims::testing::Test {};
 
@@ -112,35 +87,7 @@ TEST_F(CreateFromOptionsTest, SucceedsWithSelectiveOpResolver) {
       options, absl::make_unique<MobileSsdQuantizedOpResolver>()));
 }
 
-class MobileSsdQuantizedOpResolverMissingOps
-    : public ::tflite::MutableOpResolver {
- 	public:
-		MobileSsdQuantizedOpResolverMissingOps(){
-    
-    AddBuiltin(::tflite::BuiltinOperator_SUB
-               ::tflite::ops::builtin::Register_SUB());
-		AddBuiltin(::tflite::BuiltinOperator_MUL,
-               ::tflite::ops::builtin::Register_MUL());
-		AddBuiltin(::tflite::BuiltinOperator_CONV_2D,
-               ::tflite::ops::builtin::Register_CONV_2D());
-    AddBuiltin(::tflite::BuiltinOperator_DEPTHWISE_CONV_2D,
-               ::tflite::ops::builtin::Register_DEPTHWISE_CONV_2D());
-		AddBuiltin(::tflite::BuiltinOperator_ADD,
-               ::tflite::ops::builtin::Register_ADD());
-		AddBuiltin(::tflite::BuiltinOperator_RESIZE_BILINEAR,
-               ::tflite::ops::builtin::Register_RESIZE_BILINEAR());
-		AddBuiltin(::tflite::BuiltinOperator_LOGISTIC,
-               ::tflite::ops::builtin::Register_LOGISTIC());
-		AddBuiltin(::tflite::BuiltinOperator_RESHAPE,
-               ::tflite::ops::builtin::Register_RESHAPE());
-		AddBuiltin(::tflite::BuiltinOperator_CONCATENATION,
-               ::tflite::ops::builtin::Register_CONCATENATION());
-		
-		}
 
-		MobileSsdQuantizedOpResolverMissingOps(
-      const MobileSsdQuantizedOpResolverMissingOps& r) = delete;
-};
 
 class CreateFromOptionsTest : public tflite_shims::testing::Test {};
 
