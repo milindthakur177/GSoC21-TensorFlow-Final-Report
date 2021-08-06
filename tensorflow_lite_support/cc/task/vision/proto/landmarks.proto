@@ -1,0 +1,18 @@
+syntax = "proto2";
+
+package tflite.task.vision;
+
+import "tensorflow_lite_support/cc/task/vision/proto/class.proto";
+
+
+message Landmark {
+   
+  optional int32 keypoint_x = 1;
+  optional int32 keypoint_y =2;
+  optional float score = 3;
+  optional Class class = 4;
+}
+
+message LandmarkResult {
+  repeated Landmark landmarks = 1;
+}

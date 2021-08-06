@@ -1,0 +1,14 @@
+syntax = "proto2";
+
+package tflite.task.vision;
+
+import "tensorflow/lite/experimental/acceleration/configuration/configuration.proto";
+import "tensorflow_lite_support/cc/task/core/proto/base_options.proto";
+import "tensorflow_lite_support/cc/task/core/proto/external_file.proto";
+
+// Next Id: 14
+message LandmarkDetectorOptions {
+
+  optional tflite.task.core.BaseOptions base_options = 13;
+	
+}
