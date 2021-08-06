@@ -143,8 +143,8 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
 
 	for(i =0 ; i<numKeyPoints ; ++i){
 
-		landmarks.set_keypoint_y = output_tensor[i*3 + 0] ;
-		landmarks.set_keypoint_x = output_tensor[i*3 + 1] ;
+		landmarks.set_keypoint_y = output_tensor[i*3 + 0] *frame_buffer.dimension().height;
+		landmarks.set_keypoint_x = output_tensor[i*3 + 1] *frame_buffer.dimension().width;
 		score = output_tensor[i*3 + 2];
 
 		totalscore = totalscore + score;
