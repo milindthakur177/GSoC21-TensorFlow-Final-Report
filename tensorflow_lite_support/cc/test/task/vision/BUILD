@@ -29,7 +29,6 @@ cc_test_with_tflite(
         "//tensorflow_lite_support/cc/port:status_macros",
         "//tensorflow_lite_support/cc/task/core:task_utils",
         "//tensorflow_lite_support/cc/task/vision/core:frame_buffer",
-        "//tensorflow_lite_support/cc/task/vision/proto:bounding_box_proto_inc",
         "//tensorflow_lite_support/cc/task/vision/proto:landmarks_proto_inc",
         "//tensorflow_lite_support/cc/task/vision/proto:landmark_detector_options_proto_inc",
         "//tensorflow_lite_support/cc/task/vision/utils:frame_buffer_common_utils",
