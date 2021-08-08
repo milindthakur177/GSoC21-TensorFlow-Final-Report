@@ -55,7 +55,7 @@ StatusOr<ImageData> LoadImage(std::string image_name) {
 
 class CreateFromOptionsTest : public tflite_shims::testing::Test {};
 
-TEST(DetectTest, SucceedsWithFloatModel) {
+TEST(LandmarkTest, SucceedsWithFloatModel) {
   ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("img.jpg"));
   std::unique_ptr<FrameBuffer> frame_buffer = CreateFromRgbRawBuffer(
       rgb_image.pixel_data,
