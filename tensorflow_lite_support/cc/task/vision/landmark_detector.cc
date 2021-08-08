@@ -36,7 +36,7 @@ using ::tflite::task::core::TfLiteEngine;
 }  // namespace
 
 // Defining Number of keypoints
-val numKeyPoints = 17;
+int numKeyPoints = 17;
 /* static */
 StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
     const LandmarkDetectorOptions& options,
@@ -135,26 +135,22 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
   }
 
   const TfLiteTensor* output_tensor = output_tensors[0];
-	val numKeyPoints = 17;
+	
   LandmarkResult result;
-  Landmark* landmarks = result.add_landmarks();
-	float totalscore = 0.0;
-	float score = 0.0;
+  auto* landmarks = result.add_landmarks();
+
 
 	for(i =0 ; i<numKeyPoints ; ++i){
 
-		landmarks.set_keypoint_y = output_tensor[i*3 + 0] *frame_buffer.dimension().height;
-		landmarks.set_keypoint_x = output_tensor[i*3 + 1] *frame_buffer.dimension().width;
-		score = output_tensor[i*3 + 2];
-
-		totalscore = totalscore + score;
-	landmarks.set_score = totalscore/numKeyPoints;
+		landmarks->set_keypoint_y = output_tensor[i*3 + 0] ;
+		landmarks->set_keypoint_x = output_tensor[i*3 + 1] ;
+		landmarks->set_score = output_tensor[i*3 + 2];
 
   }
   return result;
 }
 
 
-}  // namespace vision
-}  // namespace task
+} 
+}  
 }
