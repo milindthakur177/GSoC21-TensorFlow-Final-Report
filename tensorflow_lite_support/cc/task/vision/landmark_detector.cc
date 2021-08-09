@@ -141,9 +141,9 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
 
 	for(int i =0 ; i<numKeyPoints ; ++i){
 
-		landmarks->set_keypoint_y = output_tensor[i*3 + 0] ;
-		landmarks->set_keypoint_x = output_tensor[i*3 + 1] ;
-		landmarks->set_score = output_tensor[i*3 + 2];
+		landmarks->set_keypoint_y(output_tensor[i*3 + 0]) ;
+		landmarks->set_keypoint_x(output_tensor[i*3 + 1]) ;
+		landmarks->set_score(output_tensor[i*3 + 2]);
 
   }
   return result;
