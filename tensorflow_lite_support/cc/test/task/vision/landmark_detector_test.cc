@@ -1,4 +1,4 @@
-#include "tensorflow_lite_support/cc/task/vision/image_classifier.h"
+#include "tensorflow_lite_support/cc/task/vision/landmark_detector.h"
 
 #include <memory>
 
