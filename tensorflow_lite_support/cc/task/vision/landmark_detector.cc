@@ -39,8 +39,7 @@ using ::tflite::task::core::TfLiteEngine;
 int numKeyPoints = 17;
 /* static */
 StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
-    const LandmarkDetectorOptions& options,
-    std::unique_ptr<tflite::OpResolver> resolver) {
+    const LandmarkDetectorOptions& options) {
   RETURN_IF_ERROR(SanityCheckOptions(options));
 
   // Copy options to ensure the ExternalFile outlives the constructed object.
@@ -50,12 +49,12 @@ StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
   if (options_copy->base_options().has_model_file()) {
     ASSIGN_OR_RETURN(landmark_detector,
                      TaskAPIFactory::CreateFromBaseOptions<LandmarkDetector>(
-                         &options_copy->base_options(), std::move(resolver)));
+                         &options_copy->base_options()));
   } else if (options_copy->has_model_file_with_metadata()) {
     ASSIGN_OR_RETURN(
         landmark_detector,
         TaskAPIFactory::CreateFromExternalFileProto<LandmarkDetector>(
-            &options_copy->model_file_with_metadata(), std::move(resolver)));
+            &options_copy->model_file_with_metadata()));
   } else {
     // Should never happen because of SanityCheckOptions.
     return CreateStatusWithPayload(

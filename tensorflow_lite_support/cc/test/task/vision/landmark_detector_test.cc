@@ -100,44 +100,17 @@ TEST(DetectTest, SucceedsWithFloatModel) {
 }
 
 
-TEST_F(CreateFromOptionsTest, SucceedsWithSelectiveOpResolver) {
-  LandmarkDetectorOptions options;
-  options.mutable_model_file_with_metadata()->set_file_name(
-      JoinPath("./" /*test src dir*/, kTestDataDirectory,
-               kMobileSsdWithMetadata));
-
-  SUPPORT_ASSERT_OK(LandmarkDetector::CreateFromOptions(
-      options, absl::make_unique<MobileSsdQuantizedOpResolver>()));
-}
-
-
 
 class CreateFromOptionsTest : public tflite_shims::testing::Test {};
-
-TEST_F(CreateFromOptionsTest, FailsWithSelectiveOpResolverMissingOps) {
-  LandmarkDetectorOptions options;
-  options.mutable_model_file_with_metadata()->set_file_name(
-      JoinPath("./" /*test src dir*/, kTestDataDirectory,
-               kMobileSsdWithMetadata));
-	auto landmark_detector_or = LandmarkDetector::CreateFromOptions(
-      options, absl::make_unique<MobileSsdQuantizedOpResolverMissingOps>());
-  EXPECT_EQ(landmark_detector_or.status().code(),
-            absl::StatusCode::kInvalidArgument);
-  EXPECT_THAT(landmark_detector_or.status().message(),
-              HasSubstr("Encountered unresolved custom op"));
-  EXPECT_THAT(landmark_detector_or.status().GetPayload(kTfLiteSupportPayload),
-              Optional(absl::Cord(
-                  absl::StrCat(TfLiteSupportStatus::kUnsupportedCustomOp))));
-}
 
 TEST_F(CreateFromOptionsTest, FailsWithTwoModelSources) {
   LandmarkDetectorOptions options;
   options.mutable_model_file_with_metadata()->set_file_name(
       JoinPath("./" /*test src dir*/, kTestDataDirectory,
-               kMobileSsdWithMetadata));
+               kMobileNetFloatWithMetadata));
   options.mutable_base_options()->mutable_model_file()->set_file_name(
       JoinPath("./" /*test src dir*/, kTestDataDirectory,
-               kMobileSsdWithMetadata));
+               kMobileNetFloatWithMetadata));
 
   StatusOr<std::unique_ptr<LandmarkDetector>> landmark_detector_or =
       LandmarkDetector::CreateFromOptions(options);
@@ -169,7 +142,6 @@ TEST_F(CreateFromOptionsTest, FailsWithMissingModel) {
 }
 
 
-class DetectTest : public tflite_shims::testing::Test {};
 
 }  // namespace
 }  // namespace vision
