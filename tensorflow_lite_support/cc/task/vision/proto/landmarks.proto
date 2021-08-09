@@ -7,8 +7,8 @@ import "tensorflow_lite_support/cc/task/vision/proto/class.proto";
 
 message Landmark {
   
-  optional int32 keypoint_x = 1;
-  optional int32 keypoint_y = 2;
+  optional int32 key_x = 1;
+  optional int32 key_y = 2;
   optional int32 score = 3;
   
 }
