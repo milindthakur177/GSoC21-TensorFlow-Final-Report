@@ -133,7 +133,7 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
                         output_tensors.size()));
   }
 
-  const TfLiteTensor* output_tensor = output_tensors[0];
+  //const TfLiteTensor* output_tensor = output_tensors[0];
 	
   LandmarkResult result;
   auto* landmarks = result.add_landmarks();
