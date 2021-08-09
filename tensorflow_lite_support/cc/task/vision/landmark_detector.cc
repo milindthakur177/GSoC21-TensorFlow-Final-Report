@@ -47,15 +47,15 @@ StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
   auto options_copy = absl::make_unique<LandmarkDetectorOptions>(options);
 
   std::unique_ptr<LandmarkDetector> landmark_detector;
-  if (options_copy->has_model_file_with_metadata()) {
-    ASSIGN_OR_RETURN(
-        landmark_detector,
-        TaskAPIFactory::CreateFromExternalFileProto<LandmarkDetector>(
-            &options_copy->model_file_with_metadata()));
-  } else if (options_copy->base_options().has_model_file()) {
+  if (options_copy->base_options().has_model_file()) {
     ASSIGN_OR_RETURN(landmark_detector,
                      TaskAPIFactory::CreateFromBaseOptions<LandmarkDetector>(
                          &options_copy->base_options(), std::move(resolver)));
+  } else if (options_copy->has_model_file_with_metadata()) {
+    ASSIGN_OR_RETURN(
+        landmark_detector,
+        TaskAPIFactory::CreateFromExternalFileProto<LandmarkDetector>(
+            &options_copy->model_file_with_metadata(), std::move(resolver)));
   } else {
     // Should never happen because of SanityCheckOptions.
     return CreateStatusWithPayload(
@@ -83,9 +83,7 @@ absl::Status LandmarkDetector::SanityCheckOptions(
                         num_input_models),
         TfLiteSupportStatus::kInvalidArgumentError);
   }
-
-  
-  
+ 
   return absl::OkStatus();
 }
 
@@ -133,17 +131,18 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
                         output_tensors.size()));
   }
 
-  //const TfLiteTensor* output_tensor = output_tensors[0];
+  const TfLiteTensor* output_tensor = output_tensors[0];
+  const float* tensor_output = AssertAndReturnTypedTensor<float>(output_tensors[0]);
 	
   LandmarkResult result;
-  auto* landmarks = result.add_landmarks();
-
 
 	for(int i =0 ; i<numKeyPoints ; ++i){
 
-		landmarks->set_keypoint_y(output_tensors[0][0][i][0]) ;
-		landmarks->set_keypoint_x(output_tensors[0][0][i][1]) ;
-		landmarks->set_score(output_tensors[0][0][i][2]);
+    Landmark* landmarks = result.add_landmarks();
+
+		landmarks->set_keypoint_y(tensor_output[3*i+0]) ;
+		landmarks->set_keypoint_x(tensor_output[3*i+1]) ;
+		landmarks->set_score(tensor_output[3*i+2]);
 
   }
   return result;

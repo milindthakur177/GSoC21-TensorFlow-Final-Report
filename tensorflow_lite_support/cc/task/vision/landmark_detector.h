@@ -26,9 +26,7 @@ class LandmarkDetector : public BaseVisionTaskApi<LandmarkResult> {
  public:
   using BaseVisionTaskApi::BaseVisionTaskApi;
 
-  // Creates an ImageClassifier from the provided options. A non-default
-  // OpResolver can be specified in order to support custom Ops or specify a
-  // subset of built-in Ops.
+
   static tflite::support::StatusOr<std::unique_ptr<LandmarkDetector>>
   CreateFromOptions(
       const LandmarkDetectorOptions& options,
@@ -44,57 +42,26 @@ class LandmarkDetector : public BaseVisionTaskApi<LandmarkResult> {
       const FrameBuffer& frame_buffer, const BoundingBox& roi);
 
  protected:
-  // The options used to build this ImageClassifier.
+  // The options used to build this LandmarkDetector.
   std::unique_ptr<LandmarkDetectorOptions> options_;
 
-  // The list of classification heads associated with the corresponding output
-  // tensors. Built from TFLite Model Metadata.
-  // c1 no classification heads
-  // std::vector<ClassificationHead> classification_heads_;
-
-  // Post-processing to transform the raw model outputs into classification
+  // Post-processing to transform the raw model outputs into landmarks
   // results.
   tflite::support::StatusOr<LandmarkResult> Postprocess(
       const std::vector<const TfLiteTensor*>& output_tensors,
       const FrameBuffer& frame_buffer, const BoundingBox& roi) override;
 
-  // Performs sanity checks on the provided ImageClassifierOptions.
+  // Performs sanity checks on the provided LandmarkDetectorOptions.
   static absl::Status SanityCheckOptions(const LandmarkDetectorOptions& options);
 
-  // Initializes the ImageClassifier from the provided ImageClassifierOptions,
+  // Initializes the LandmarkDetector from the provided LandmarkDetectorOptions,
   // whose ownership is transferred to this object.
   absl::Status Init(std::unique_ptr<LandmarkDetectorOptions> options);
 
   // Performs pre-initialization actions.
   virtual absl::Status PreInit();
-  // Performs post-initialization actions.
-  // virtual absl::Status PostInit();
-
- private:
-  // Performs sanity checks on the model outputs and extracts their metadata.
-  // c2 disabling 
-  // absl::Status CheckAndSetOutputs();
-
-  // Performs sanity checks on the class whitelist/blacklist and forms the class
 
 
-  // Given a ClassificationResult object containing class indices, fills the
-  // name and display name from the label map(s).
-
-
-  // The number of output tensors. This corresponds to the number of
-  // classification heads.
-  int num_outputs_;
-  // Whether the model features quantized inference type (QUANTIZED_UINT8). This
-  // is currently detected by checking if all output tensors data type is uint8.
-  bool has_uint8_outputs_;
-
-
-
-  // List of score calibration parameters, if any. Built from TFLite Model
-  // Metadata.
-  // c3 no score calliberation needed
-  // std::vector<std::unique_ptr<ScoreCalibration>> score_calibrations_;
 };
 
 }  // namespace vision
