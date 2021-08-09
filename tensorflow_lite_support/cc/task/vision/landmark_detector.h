@@ -29,9 +29,8 @@ class LandmarkDetector : public BaseVisionTaskApi<LandmarkResult> {
 
   static tflite::support::StatusOr<std::unique_ptr<LandmarkDetector>>
   CreateFromOptions(
-      const LandmarkDetectorOptions& options,
-      std::unique_ptr<tflite::OpResolver> resolver =
-          absl::make_unique<tflite_shims::ops::builtin::BuiltinOpResolver>());
+      const LandmarkDetectorOptions& options
+      );
 
 
   tflite::support::StatusOr<LandmarkResult> Detect(
