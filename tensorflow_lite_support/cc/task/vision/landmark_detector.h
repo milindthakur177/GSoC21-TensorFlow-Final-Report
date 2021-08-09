@@ -80,7 +80,7 @@ class LandmarkDetector : public BaseVisionTaskApi<LandmarkResult> {
 
   // Given a ClassificationResult object containing class indices, fills the
   // name and display name from the label map(s).
-  absl::Status FillResults(LandmarkResult* result);
+
 
   // The number of output tensors. This corresponds to the number of
   // classification heads.

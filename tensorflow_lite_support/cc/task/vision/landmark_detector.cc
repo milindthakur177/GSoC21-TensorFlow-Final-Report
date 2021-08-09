@@ -51,8 +51,7 @@ StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
     ASSIGN_OR_RETURN(
         landmark_detector,
         TaskAPIFactory::CreateFromExternalFileProto<LandmarkDetector>(
-            &options_copy->model_file_with_metadata(), std::move(resolver),
-            options_copy->num_threads(), options_copy->compute_settings()));
+            &options_copy->model_file_with_metadata()));
   } else if (options_copy->base_options().has_model_file()) {
     ASSIGN_OR_RETURN(landmark_detector,
                      TaskAPIFactory::CreateFromBaseOptions<LandmarkDetector>(
@@ -140,7 +139,7 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
   auto* landmarks = result.add_landmarks();
 
 
-	for(i =0 ; i<numKeyPoints ; ++i){
+	for(int i =0 ; i<numKeyPoints ; ++i){
 
 		landmarks->set_keypoint_y = output_tensor[i*3 + 0] ;
 		landmarks->set_keypoint_x = output_tensor[i*3 + 1] ;

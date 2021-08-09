@@ -10,5 +10,5 @@ import "tensorflow_lite_support/cc/task/core/proto/external_file.proto";
 message LandmarkDetectorOptions {
 
   optional tflite.task.core.BaseOptions base_options = 13;
-	
+	optional core.ExternalFile model_file_with_metadata = 13;
 }
