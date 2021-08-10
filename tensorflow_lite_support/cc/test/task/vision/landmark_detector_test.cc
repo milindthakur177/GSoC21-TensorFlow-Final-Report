@@ -47,42 +47,12 @@ constexpr char kMobileNetFloatWithMetadata[] =
     "lite-model_movenet_singlepose_lightning_tflite_int8_4_with_metadata.tflite";
 
 
-StatusOr<ImageData> LoadImage(std::string image_name) {
-  return DecodeImageFromFile(JoinPath("./" /*test src dir*/,
-                                      kTestDataDirectory, image_name));
-}
-
 
 
 class CreateFromOptionsTest : public tflite_shims::testing::Test {};
 
-class DetectTest : public tflite_shims::testing::Test {};
-
-TEST_F(DetectTest, SucceedsWithFloatModel) {
-  ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("img.jpg"));
-  std::unique_ptr<FrameBuffer> frame_buffer = CreateFromRgbRawBuffer(
-      rgb_image.pixel_data,
-      FrameBuffer::Dimension{rgb_image.width, rgb_image.height});
-
-  LandmarkDetectorOptions options;
-  
-  options.mutable_model_file_with_metadata()->set_file_name(
-      JoinPath(absl::GetFlag(FLAGS_test_srcdir), kTestDataDirectory,
-               kMobileNetFloatWithMetadata));
-
-  ASSERT_OK_AND_ASSIGN(std::unique_ptr<LandmarkDetector> landmark_detector,
-                       LandmarkDetector::CreateFromOptions(options));
-
-  StatusOr<LandmarkResult> result_or =
-      landmark_detector->Detect(*frame_buffer);
-  ImageDataFree(&rgb_image);
-  ASSERT_OK(result_or);
-
-  const LandmarkResult& result = result_or.value();
-  EXPECT_THAT(
-      result,
-      Approximately(EqualsProto(
-          R"pb( landmarks {key_x : 0.3613621 key_y : 0.5010699 score : 0.56745684}
+constexpr char kExpectResults[] = 
+  R"pb( landmarks {key_x : 0.3613621 key_y : 0.5010699 score : 0.56745684}
                 landmarks {key_x : 0.33323765 key_y : 0.52654934 score : 0.7113907}
                 landmarks {key_x : 0.33484635 key_y : 0.47475347 score : 0.5633223}
                 landmarks {key_x : 0.3527827 key_y : 0.5659141 score : 0.59997165}
@@ -99,7 +69,11 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
                 landmarks {key_x : 0.8424358 key_y : 0.40062594 score : 0.07926878}
                 landmarks {key_x : 0.7112423 key_y : 0.49748933 score : 0.10836774}
                 landmarks {key_x : 0.80640984 key_y : 0.6251471 score : 0.07497841}
-          )pb")));
+          )pb"
+
+StatusOr<ImageData> LoadImage(std::string image_name) {
+  return DecodeImageFromFile(JoinPath("./" /*test src dir*/,
+                                      kTestDataDirectory, 'img.jpg'));
 }
 
 TEST_F(CreateFromOptionsTest, FailsWithTwoModelSources) {
