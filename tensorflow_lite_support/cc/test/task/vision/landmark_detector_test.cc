@@ -72,7 +72,7 @@ constexpr char kExpectResults[] =
           )pb";
 StatusOr<ImageData> LoadImage(std::string image_name) {
   return DecodeImageFromFile(JoinPath("./" /*test src dir*/,
-                                      kTestDataDirectory, "img.jpg"));
+                                      kTestDataDirectory, image_name));
 }
 
 TEST_F(CreateFromOptionsTest, FailsWithTwoModelSources) {
