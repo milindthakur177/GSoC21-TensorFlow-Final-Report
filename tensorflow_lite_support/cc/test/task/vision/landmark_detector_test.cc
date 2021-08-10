@@ -113,7 +113,7 @@ TEST_F(CreateFromOptionsTest, FailsWithMissingModel) {
 }
 class DetectTest : public tflite_shims::testing::Test {};
 TEST_F(DetectTest, SucceedsWithFloatModel) {
-  ASSERT_OK_AND_ASSIGN(ImageData->rgb_image, LoadImage("img.jpg"));
+  SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("img.jpg"));
   std::unique_ptr<FrameBuffer> frame_buffer = CreateFromRgbRawBuffer(
       rgb_image.pixel_data,
       FrameBuffer::Dimension{rgb_image.width, rgb_image.height});
@@ -124,7 +124,7 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
       JoinPath(absl::GetFlag(FLAGS_test_srcdir), kTestDataDirectory,
                kMobileNetFloatWithMetadata));
 
-  ASSERT_OK_AND_ASSIGN(std::unique_ptr<LandmarkDetector> landmark_detector,
+  SUPPORT_ASSERT_OK_AND_ASSIGN(std::unique_ptr<LandmarkDetector> landmark_detector,
                        LandmarkDetector::CreateFromOptions(options));
 
   StatusOr<LandmarkResult> result_or =
