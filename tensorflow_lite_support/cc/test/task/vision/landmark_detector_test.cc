@@ -130,7 +130,7 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   StatusOr<LandmarkResult> result_or =
       landmark_detector->Detect(*frame_buffer);
   ImageDataFree(&rgb_image);
-  ASSERT_OK(result_or);
+  SUPPORT_ASSERT_OK(result_or);
 
   const LandmarkResult& result = result_or.value();
   EXPECT_THAT(
