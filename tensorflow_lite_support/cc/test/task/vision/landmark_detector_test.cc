@@ -70,7 +70,7 @@ constexpr char kExpectResults[] =
                 landmarks {key_x : 0.7112423 key_y : 0.49748933 score : 0.10836774}
                 landmarks {key_x : 0.80640984 key_y : 0.6251471 score : 0.07497841}
           )pb";
-std::string image_name = "img.jpg"
+std::string image_name = "img.jpg";
 StatusOr<ImageData> LoadImage(image_name) {
   return DecodeImageFromFile(JoinPath("./" /*test src dir*/,
                                       kTestDataDirectory, image_name));
