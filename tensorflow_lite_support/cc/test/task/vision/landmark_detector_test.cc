@@ -120,9 +120,6 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
 
   LandmarkDetectorOptions options;
   
-  options.mutable_model_file_with_metadata()->set_file_name(
-      JoinPath(absl::GetFlag(FLAGS_test_srcdir), kTestDataDirectory,
-               kMobileNetFloatWithMetadata));
 
   SUPPORT_ASSERT_OK_AND_ASSIGN(std::unique_ptr<LandmarkDetector> landmark_detector,
                        LandmarkDetector::CreateFromOptions(options));
@@ -159,7 +156,6 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
 
 
 
-}
 
 
 
