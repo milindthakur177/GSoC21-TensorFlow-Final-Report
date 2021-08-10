@@ -132,7 +132,7 @@ TEST(DetectTest, SucceedsWithFloatModel) {
   const LandmarkResult& result = result_or.value();
   EXPECT_THAT(
       result,
-      kExpectResults));
+      kExpectResults);
 }
 
 
