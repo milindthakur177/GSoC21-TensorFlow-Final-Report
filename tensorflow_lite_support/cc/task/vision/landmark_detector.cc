@@ -139,12 +139,9 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
 
     Landmark* landmarks = result.add_landmarks();
 
-		//landmarks->set_key_y(tensor_output[3*i+0]) ;
-		//landmarks->set_key_x(tensor_output[3*i+1]) ;
-		//landmarks->set_score(tensor_output[3*i+2]);
-    landmarks->set_key_y(output_tensor[3*i+0]);
-    landmarks->set_key_x(output_tensor[3*i+1]);
-    landmarks->set_score(output_tensor[3*i+2]);
+		landmarks->set_key_y(tensor_output[3*i+0]) ;
+		landmarks->set_key_x(tensor_output[3*i+1]) ;
+		landmarks->set_score(tensor_output[3*i+2]);
 
   }
   return result;
