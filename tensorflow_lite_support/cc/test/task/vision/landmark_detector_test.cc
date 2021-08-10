@@ -111,7 +111,7 @@ TEST_F(CreateFromOptionsTest, FailsWithMissingModel) {
               Optional(absl::Cord(
                   absl::StrCat(TfLiteSupportStatus::kInvalidArgumentError))));
 }
-
+class DetectTest : public tflite_shims::testing::Test {};
 TEST_F(DetectTest, SucceedsWithFloatModel) {
   ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("img.jpg"));
   std::unique_ptr<FrameBuffer> frame_buffer = CreateFromRgbRawBuffer(
