@@ -47,10 +47,6 @@ constexpr char kMobileNetFloatWithMetadata[] =
     "lite-model_movenet_singlepose_lightning_tflite_int8_4_with_metadata.tflite";
 
 
-
-
-class CreateFromOptionsTest : public tflite_shims::testing::Test {};
-
 constexpr char kExpectResults[] = 
   R"pb( landmarks {key_x : 0.3613621 key_y : 0.5010699 score : 0.56745684}
                 landmarks {key_x : 0.33323765 key_y : 0.52654934 score : 0.7113907}
@@ -72,15 +68,18 @@ constexpr char kExpectResults[] =
           )pb";
 StatusOr<ImageData> LoadImage(std::string image_name) {
   return DecodeImageFromFile(JoinPath("./" /*test src dir*/,
-                                      kTestDataDirectory, "img.jpg"));
+                                      kTestDataDirectory, image_name));
 }
+
+class CreateFromOptionsTest : public tflite_shims::testing::Test {};
+
 
 TEST_F(CreateFromOptionsTest, FailsWithTwoModelSources) {
   LandmarkDetectorOptions options;
-  options.mutable_model_file_with_metadata()->set_file_name(
+  options.mutable_base_options()->mutable_model_file()->set_file_name(
       JoinPath("./" /*test src dir*/, kTestDataDirectory,
                kMobileNetFloatWithMetadata));
-  options.mutable_base_options()->mutable_model_file()->set_file_name(
+  options.mutable_model_file_with_metadata()->set_file_name(
       JoinPath("./" /*test src dir*/, kTestDataDirectory,
                kMobileNetFloatWithMetadata));
 
@@ -111,6 +110,55 @@ TEST_F(CreateFromOptionsTest, FailsWithMissingModel) {
   EXPECT_THAT(landmark_detector_or.status().GetPayload(kTfLiteSupportPayload),
               Optional(absl::Cord(
                   absl::StrCat(TfLiteSupportStatus::kInvalidArgumentError))));
+}
+
+TEST_F(DetectTest, SucceedsWithFloatModel) {
+  ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("img.jpg"));
+  std::unique_ptr<FrameBuffer> frame_buffer = CreateFromRgbRawBuffer(
+      rgb_image.pixel_data,
+      FrameBuffer::Dimension{rgb_image.width, rgb_image.height});
+
+  LandmarkDetectorOptions options;
+  
+  options.mutable_model_file_with_metadata()->set_file_name(
+      JoinPath(absl::GetFlag(FLAGS_test_srcdir), kTestDataDirectory,
+               kMobileNetFloatWithMetadata));
+
+  ASSERT_OK_AND_ASSIGN(std::unique_ptr<LandmarkDetector> landmark_detector,
+                       LandmarkDetector::CreateFromOptions(options));
+
+  StatusOr<LandmarkResult> result_or =
+      landmark_detector->Detect(*frame_buffer);
+  ImageDataFree(&rgb_image);
+  ASSERT_OK(result_or);
+
+  const LandmarkResult& result = result_or.value();
+  EXPECT_THAT(
+      result,
+      Approximately(EqualsProto(
+          R"pb( landmarks {key_x : 0.3613621 key_y : 0.5010699 score : 0.56745684}
+                landmarks {key_x : 0.33323765 key_y : 0.52654934 score : 0.7113907}
+                landmarks {key_x : 0.33484635 key_y : 0.47475347 score : 0.5633223}
+                landmarks {key_x : 0.3527827 key_y : 0.5659141 score : 0.59997165}
+                landmarks {key_x : 0.3565011 key_y : 0.44451794 score : 0.7448181}
+                landmarks {key_x : 0.4915269 key_y : 0.6487602 score : 0.81670046}
+                landmarks {key_x : 0.48380172 key_y : 0.35149667 score : 0.8441073}
+                landmarks {key_x : 0.74440265 key_y : 0.6574936 score : 0.85803306}
+                landmarks {key_x : 0.7394606 key_y : 0.3209864 score : 0.84626555}
+                landmarks {key_x : 0.69045323 key_y : 0.54254323 score : 0.35415077}
+                landmarks {key_x : 0.69133437 key_y : 0.52659225 score : 0.5010598}
+                landmarks {key_x : 0.813216 key_y : 0.5792549 score : 0.6837475}
+                landmarks {key_x : 0.81319857 key_y : 0.42052758 score : 0.69535846}
+                landmarks {key_x : 0.8274471 key_y : 0.62838054 score : 0.15943679}
+                landmarks {key_x : 0.8424358 key_y : 0.40062594 score : 0.07926878}
+                landmarks {key_x : 0.7112423 key_y : 0.49748933 score : 0.10836774}
+                landmarks {key_x : 0.80640984 key_y : 0.6251471 score : 0.07497841}
+          )pb")));
+}
+
+
+
+
 }
 
 
