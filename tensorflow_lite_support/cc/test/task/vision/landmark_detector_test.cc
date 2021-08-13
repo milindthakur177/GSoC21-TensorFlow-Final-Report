@@ -87,6 +87,7 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   float y = result.landmarks(0).key_y();
   EXPECT_EQ(y, key_y_golden[0]);
 
+}
 
 class CreateFromOptionsTest : public tflite_shims::testing::Test {};
 
