@@ -55,7 +55,7 @@ StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
   } else if (options_copy->base_options().has_model_file()) {
     ASSIGN_OR_RETURN(landmark_detector,
                      TaskAPIFactory::CreateFromBaseOptions<LandmarkDetector>(
-                         &options_copy->base_options(), std::move(resolver)));
+                         &options_copy->base_options()));
   } else {
     // Should never happen because of SanityCheckOptions.
     return CreateStatusWithPayload(
