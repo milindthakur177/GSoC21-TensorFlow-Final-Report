@@ -92,9 +92,9 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   std::vector<float> golden_score;
 
   for (int i =0 ; i<17 ; ++i){
-    golden_x.push_back(result.landmarks(0).key_y());
-    golden_y.push_back(result.landmarks(0).key_x());
-    golden_score.push_back(result.landmarks(0).score());
+    golden_y.push_back(result.landmarks(i).key_y());
+    golden_x.push_back(result.landmarks(i).key_x());
+    golden_score.push_back(result.landmarks(i).score());
   }
   EXPECT_EQ(golden_x, key_x_golden);
   //EXPECT_EQ(golden_y, key_y_golden);
