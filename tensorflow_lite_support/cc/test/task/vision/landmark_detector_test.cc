@@ -66,7 +66,7 @@ TEST_F(CreateFromOptionsTest, FailsWithTwoModelSources) {
 
   EXPECT_EQ(landmark_detector_or.status().code(),
             absl::StatusCode::kInvalidArgument);
-  EXPECT_THAT(landmark_detector_or_or.status().message(),
+  EXPECT_THAT(landmark_detector_or.status().message(),
               HasSubstr("Expected exactly one of `base_options.model_file` or "
                         "`model_file_with_metadata` to be provided, found 2."));
   EXPECT_THAT(landmark_detector_or.status().GetPayload(kTfLiteSupportPayload),
