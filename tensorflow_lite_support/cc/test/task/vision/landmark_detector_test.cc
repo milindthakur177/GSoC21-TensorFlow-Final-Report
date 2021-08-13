@@ -113,28 +113,7 @@ TEST_F(CreateFromOptionsTest, FailsWithMissingModel) {
 }
 std::vector<float> key_y_golden = {0.5010699, 0.52654934, 0.47475347, 0.5659141, 0.44451794, 0.6487602, 0.35149667, 0.6574936,
                         0.3209864, 0.54254323, 0.52659225, 0.5792549, 0.42052758, 0.62838054, 0.40062594, 0.49748933, 0.6251471};
-class DetectTest : public tflite_shims::testing::Test {};
-TEST_F(DetectTest, SucceedsWithFloatModel) {
-  SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("img.jpg"));
-  std::unique_ptr<FrameBuffer> frame_buffer = CreateFromRgbRawBuffer(
-      rgb_image.pixel_data,
-      FrameBuffer::Dimension{rgb_image.width, rgb_image.height});
 
-  LandmarkDetectorOptions options;
-  
-
-  SUPPORT_ASSERT_OK_AND_ASSIGN(std::unique_ptr<LandmarkDetector> landmark_detector,
-                       LandmarkDetector::CreateFromOptions(options));
-
-  StatusOr<LandmarkResult> result_or =
-      landmark_detector->Detect(*frame_buffer);
-  ImageDataFree(&rgb_image);
-  SUPPORT_ASSERT_OK(result_or);
-  const LandmarkResult& result = result_or.value();
-
-  EXPECT_THAT(result[1].key_y(), key_y_golden[0]);
-  
-}
 }  // namespace
 }  // namespace vision
 }  // namespace task
