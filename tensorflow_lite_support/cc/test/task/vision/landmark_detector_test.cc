@@ -111,6 +111,8 @@ TEST_F(CreateFromOptionsTest, FailsWithMissingModel) {
               Optional(absl::Cord(
                   absl::StrCat(TfLiteSupportStatus::kInvalidArgumentError))));
 }
+std::vector<float> key_y_golden = {0.5010699, 0.52654934, 0.47475347, 0.5659141, 0.44451794, 0.6487602, 0.35149667, 0.6574936,
+                        0.3209864, 0.54254323, 0.52659225, 0.5792549, 0.42052758, 0.62838054, 0.40062594, 0.49748933, 0.6251471};
 class DetectTest : public tflite_shims::testing::Test {};
 TEST_F(DetectTest, SucceedsWithFloatModel) {
   SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("img.jpg"));
@@ -128,18 +130,10 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
       landmark_detector->Detect(*frame_buffer);
   ImageDataFree(&rgb_image);
   SUPPORT_ASSERT_OK(result_or);
-
   const LandmarkResult& result = result_or.value();
-  EXPECT_THAT(
-      result,
-      kExpectResults);
-}
 
-
-
-
-
-
+  EXPECT_EQ(result[0].key_x(), key_y_golden[0]);
+  
 
 }  // namespace
 }  // namespace vision
