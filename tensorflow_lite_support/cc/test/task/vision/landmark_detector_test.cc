@@ -40,7 +40,7 @@ using ::tflite::task::core::PopulateTensor;
 using ::tflite::task::core::TaskAPIFactory;
 using ::tflite::task::core::TfLiteEngine;
 
-const numKeyPoints = 17;
+int numKeyPoints = 17;
 
 constexpr char kTestDataDirectory[] =
     "tensorflow_lite_support/cc/test/testdata/task/vision/";
