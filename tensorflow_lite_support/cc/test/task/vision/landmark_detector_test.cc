@@ -84,9 +84,9 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   SUPPORT_ASSERT_OK(result_or);
 
   const LandmarkResult& result = result_or.value();
-  //float y = result.landmarks(0).key_y();
-  //EXPECT_EQ(y, key_y_golden[0]);
-
+  float y = result.landmarks(4).key_y();
+  EXPECT_EQ(y, key_y_golden[4]);
+/*
   std::vector<float> golden_x;
   std::vector<float> golden_y;
   std::vector<float> golden_score;
@@ -99,7 +99,7 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   EXPECT_EQ(golden_x, key_x_golden);
   //EXPECT_EQ(golden_y, key_y_golden);
   //EXPECT_EQ(golden_score, score_golden);
-
+*/
 }
 
 class CreateFromOptionsTest : public tflite_shims::testing::Test {};
