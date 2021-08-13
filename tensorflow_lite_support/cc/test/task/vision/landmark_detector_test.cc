@@ -84,8 +84,21 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   SUPPORT_ASSERT_OK(result_or);
 
   const LandmarkResult& result = result_or.value();
-  float y = result.landmarks(0).key_y();
-  EXPECT_EQ(y, key_y_golden[0]);
+  //float y = result.landmarks(0).key_y();
+  //EXPECT_EQ(y, key_y_golden[0]);
+
+  std::vector<float> golden_x;
+  std::vector<float> golden_y;
+  std::vector<float> golden_score;
+
+  for (int i =0 ; i<17 ; ++i){
+    golden_x.push_back(result.landmarks(0).key_y());
+    golden_y.push_back(result.landmarks(0).key_x());
+    golden_score.push_back(result.landmarks(0).score());
+  }
+  EXPECT_EQ(golden_x, key_x_golden);
+  //EXPECT_EQ(golden_y, key_y_golden);
+  //EXPECT_EQ(golden_score, score_golden);
 
 }
 
