@@ -18,7 +18,6 @@
 #include "tensorflow_lite_support/cc/task/core/task_utils.h"
 #include "tensorflow_lite_support/cc/task/core/tflite_engine.h"
 #include "tensorflow_lite_support/cc/task/vision/core/frame_buffer.h"
-#include "tensorflow_lite_support/cc/task/vision/proto/bounding_box_proto_inc.h"
 #include "tensorflow_lite_support/cc/task/vision/proto/landmarks_proto_inc.h"
 #include "tensorflow_lite_support/cc/task/vision/proto/landmark_detector_options_proto_inc.h"
 #include "tensorflow_lite_support/cc/task/vision/utils/frame_buffer_common_utils.h"
@@ -46,9 +45,45 @@ constexpr char kTestDataDirectory[] =
 constexpr char kMobileNetFloatWithMetadata[] =
     "lite-model_movenet_singlepose_lightning_tflite_int8_4_with_metadata.tflite";
 
+std::vector<float> key_y_golden = {0.5010699, 0.52654934, 0.47475347, 0.5659141, 0.44451794, 0.6487602, 0.35149667, 0.6574936,
+                        0.3209864, 0.54254323, 0.52659225, 0.5792549, 0.42052758, 0.62838054, 0.40062594, 0.49748933, 0.6251471};
+
+std::vector<float> key_x_golden = {0.3613621, 0.33323765, 0.33484635, 0.3527827, 0.3565011, 0.4915269, 0.48380172, 0.74440265, 
+                        0.7394606, 0.69045323, 0.69133437, 0.813216, 0.81319857, 0.8274471, 0.8424358,  0.7112423, 0.80640984};
+
+std::vector<float> score_golden = {0.56745684, 0.7113907, 0.5633223, 0.59997165, 0.7448181, 0.81670046, 0.8441073, 0.85803306, 
+                        0.84626555, 0.35415077, 0.5010598, 0.6837475, 0.69535846, 0.15943679, 0.07926878, 0.10836774, 0.07497841};
+
+class DetectTest : public tflite_shims::testing::Test {};
+
 StatusOr<ImageData> LoadImage(std::string image_name) {
   return DecodeImageFromFile(JoinPath("./" /*test src dir*/,
                                       kTestDataDirectory, image_name));
+}
+
+TEST_F(DetectTest, SucceedsWithFloatModel) {
+  ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("img.jpg"));
+  std::unique_ptr<FrameBuffer> frame_buffer = CreateFromRgbRawBuffer(
+      rgb_image.pixel_data,
+      FrameBuffer::Dimension{rgb_image.width, rgb_image.height});
+
+  LandmarkDetectorOptions options;
+  options.mutable_base_options()->mutable_model_file()->set_file_name(
+      JoinPath( "./" /*test src dir*/,kTestDataDirectory,
+               kMobileNetFloatWithMetadata));
+  SUPPORT_ASSERT_OK_AND_ASSIGN(std::unique_ptr<LandmarkDetector> landmark_detector,
+                       LandmarkDetector::CreateFromOptions(options));
+  
+  StatusOr<LandmarkResult> result_or =
+      landmark_detector->Detect(*frame_buffer);
+  ImageDataFree(&rgb_image);
+  SUPPORT_ASSERT_OK(result_or);
+
+  const LandmarkResult& result = result_or.value();
+  
+  EXPECT_EQ(result[0].key_y(), key_y_golden[0]);
+
+          
 }
 
 class CreateFromOptionsTest : public tflite_shims::testing::Test {};
@@ -91,8 +126,7 @@ TEST_F(CreateFromOptionsTest, FailsWithMissingModel) {
               Optional(absl::Cord(
                   absl::StrCat(TfLiteSupportStatus::kInvalidArgumentError))));
 }
-std::vector<float> key_y_golden = {0.5010699, 0.52654934, 0.47475347, 0.5659141, 0.44451794, 0.6487602, 0.35149667, 0.6574936,
-                        0.3209864, 0.54254323, 0.52659225, 0.5792549, 0.42052758, 0.62838054, 0.40062594, 0.49748933, 0.6251471};
+
 
 }  // namespace
 }  // namespace vision
