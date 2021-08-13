@@ -54,7 +54,7 @@ StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
     // Should never happen because of SanityCheckOptions.
     return CreateStatusWithPayload(
         StatusCode::kInvalidArgument,
-        absl::StrFormat("Expected one of `base_options.model_file`  "
+        absl::StrFormat("Expected exactly one `base_options.model_file`  "
                         "to be provided, found 0."),
         TfLiteSupportStatus::kInvalidArgumentError);
   }
@@ -71,7 +71,7 @@ absl::Status LandmarkDetector::SanityCheckOptions(
   if (num_input_models != 1) {
     return CreateStatusWithPayload(
         StatusCode::kInvalidArgument,
-        absl::StrFormat("Expected one of `base_options.model_file` "
+        absl::StrFormat("Expected exactly one `base_options.model_file` "
                         " to be provided, found %d.",
                         num_input_models),
         TfLiteSupportStatus::kInvalidArgumentError);

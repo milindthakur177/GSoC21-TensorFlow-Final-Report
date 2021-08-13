@@ -2,8 +2,6 @@ syntax = "proto2";
 
 package tflite.task.vision;
 
-import "tensorflow_lite_support/cc/task/vision/proto/class.proto";
-
 
 message Landmark {
   optional float key_y = 1;
