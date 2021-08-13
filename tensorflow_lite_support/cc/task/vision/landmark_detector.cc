@@ -50,17 +50,12 @@ StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
     ASSIGN_OR_RETURN(landmark_detector,
                      TaskAPIFactory::CreateFromBaseOptions<LandmarkDetector>(
                          &options_copy->base_options()));
-  } else if (options_copy->has_model_file_with_metadata()) {
-    ASSIGN_OR_RETURN(
-        landmark_detector,
-        TaskAPIFactory::CreateFromExternalFileProto<LandmarkDetector>(
-            &options_copy->model_file_with_metadata()));
   } else {
     // Should never happen because of SanityCheckOptions.
     return CreateStatusWithPayload(
         StatusCode::kInvalidArgument,
-        absl::StrFormat("Expected exactly one of `base_options.model_file` or "
-                        "`model_file_with_metadata` to be provided, found 0."),
+        absl::StrFormat("Expected one of `base_options.model_file`  "
+                        "to be provided, found 0."),
         TfLiteSupportStatus::kInvalidArgumentError);
   }
 
@@ -72,13 +67,12 @@ StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
 /* static */
 absl::Status LandmarkDetector::SanityCheckOptions(
     const LandmarkDetectorOptions& options) {
-  int num_input_models = (options.base_options().has_model_file() ? 1 : 0) +
-                         (options.has_model_file_with_metadata() ? 1 : 0);
+  int num_input_models = (options.base_options().has_model_file() ? 1 : 0);
   if (num_input_models != 1) {
     return CreateStatusWithPayload(
         StatusCode::kInvalidArgument,
-        absl::StrFormat("Expected exactly one of `base_options.model_file` or "
-                        "`model_file_with_metadata` to be provided, found %d.",
+        absl::StrFormat("Expected one of `base_options.model_file` "
+                        " to be provided, found %d.",
                         num_input_models),
         TfLiteSupportStatus::kInvalidArgumentError);
   }
