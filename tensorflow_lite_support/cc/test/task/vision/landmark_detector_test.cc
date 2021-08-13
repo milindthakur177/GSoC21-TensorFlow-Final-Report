@@ -56,7 +56,9 @@ class CreateFromOptionsTest : public tflite_shims::testing::Test {};
 
 TEST_F(CreateFromOptionsTest, FailsWithTwoModelSources) {
   LandmarkDetectorOptions options;
-  
+  options.mutable_model_file_with_metadata()->set_file_name(
+      JoinPath("./" /*test src dir*/, kTestDataDirectory,
+               kMobileNetQuantizedWithMetadata));
   options.mutable_base_options()->mutable_model_file()->set_file_name(
       JoinPath("./" /*test src dir*/, kTestDataDirectory,
                kMobileNetFloatWithMetadata));
