@@ -134,7 +134,7 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
 
   EXPECT_EQ(result[0].key_y(), key_y_golden[0]);
   
-
+}
 }  // namespace
 }  // namespace vision
 }  // namespace task
