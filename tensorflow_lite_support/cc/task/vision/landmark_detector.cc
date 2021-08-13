@@ -132,7 +132,7 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
   }
 
   const TfLiteTensor* output_tensor = output_tensors[0];
-  const float* tensor_output = AssertAndReturnTypedTensor<float>(output_tensor);
+  const float* outputs = AssertAndReturnTypedTensor<float>(output_tensor);
 	
   LandmarkResult result;
 
@@ -140,9 +140,9 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
 
     Landmark* landmarks = result.add_landmarks();
 
-		landmarks->set_key_y(tensor_output[3*i+0]) ;
-		landmarks->set_key_x(tensor_output[3*i+1]) ;
-		landmarks->set_score(tensor_output[3*i+2]);
+		landmarks->set_key_y(outputs[3*i+0]) ;
+		landmarks->set_key_x(outputs[3*i+1]) ;
+		landmarks->set_score(outputs[3*i+2]);
 
   }
   return result;

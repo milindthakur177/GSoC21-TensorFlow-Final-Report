@@ -40,19 +40,23 @@ using ::tflite::task::core::PopulateTensor;
 using ::tflite::task::core::TaskAPIFactory;
 using ::tflite::task::core::TfLiteEngine;
 
+const numKeyPoints = 17;
+
 constexpr char kTestDataDirectory[] =
     "tensorflow_lite_support/cc/test/testdata/task/vision/";
+
 constexpr char kMobileNetFloatWithMetadata[] =
     "lite-model_movenet_singlepose_lightning_tflite_int8_4_with_metadata.tflite";
 
-std::vector<float> key_y_golden = {0.5010699, 0.52654934, 0.47475347, 0.5659141, 0.44451794, 0.6487602, 0.35149667, 0.6574936,
-                        0.3209864, 0.54254323, 0.52659225, 0.5792549, 0.42052758, 0.62838054, 0.40062594, 0.49748933, 0.6251471};
+std::vector<float> key_y_golden = {0.1442298, 0.1300826, 0.13248327, 0.14726797, 0.15074761, 0.2509237, 0.25660858, 0.34447512, 0.35794544,
+                                    0.4101003, 0.44464612, 0.4826307, 0.4889217, 0.6693059, 0.6870472, 0.82553387, 0.86639106};
 
-std::vector<float> key_x_golden = {0.3613621, 0.33323765, 0.33484635, 0.3527827, 0.3565011, 0.4915269, 0.48380172, 0.74440265, 
-                        0.7394606, 0.69045323, 0.69133437, 0.813216, 0.81319857, 0.8274471, 0.8424358,  0.7112423, 0.80640984};
+std::vector<float> key_x_golden = {0.5040901, 0.51998615, 0.48847437, 0.5424121, 0.4656546, 0.57788885, 0.43163484, 0.6175001, 0.38216457,
+                                    0.60705376, 0.4151504, 0.554312, 0.45635343, 0.54465926, 0.45363468, 0.5266466, 0.42971918};
 
-std::vector<float> score_golden = {0.56745684, 0.7113907, 0.5633223, 0.59997165, 0.7448181, 0.81670046, 0.8441073, 0.85803306, 
-                        0.84626555, 0.35415077, 0.5010598, 0.6837475, 0.69535846, 0.15943679, 0.07926878, 0.10836774, 0.07497841};
+std::vector<float> score_golden = {0.44470087, 0.5480462, 0.6591966, 0.3904021, 0.4450525, 0.7143093, 0.6618434, 0.5292502, 0.689163, 
+                                    0.48138157, 0.64457417, 0.71147513, 0.6135119, 0.51524675, 0.6072499, 0.5642306, 0.5547067};
+
 
 class DetectTest : public tflite_shims::testing::Test {};
 
@@ -62,7 +66,7 @@ StatusOr<ImageData> LoadImage(std::string image_name) {
 }
 
 TEST_F(DetectTest, SucceedsWithFloatModel) {
-  SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("img.jpg"));
+  SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("womanstanding.jpg"));
   std::unique_ptr<FrameBuffer> frame_buffer = CreateFromRgbRawBuffer(
       rgb_image.pixel_data,
       FrameBuffer::Dimension{rgb_image.width, rgb_image.height});
@@ -83,30 +87,6 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   float y = result.landmarks(0).key_y();
   EXPECT_EQ(y, key_y_golden[0]);
 
-/*
-  EXPECT_THAT(
-      result,
-      R"pb( landmarks {key_x : 0.3613621 key_y : 0.5010699 score : 0.56745684}
-            landmarks {key_x : 0.33323765 key_y : 0.52654934 score : 0.7113907}
-            landmarks {key_x : 0.33484635 key_y : 0.47475347 score : 0.5633223}
-            landmarks {key_x : 0.3527827 key_y : 0.5659141 score : 0.59997165}
-            landmarks {key_x : 0.3565011 key_y : 0.44451794 score : 0.7448181}
-            landmarks {key_x : 0.4915269 key_y : 0.6487602 score : 0.81670046}
-            landmarks {key_x : 0.48380172 key_y : 0.35149667 score : 0.8441073}
-            landmarks {key_x : 0.74440265 key_y : 0.6574936 score : 0.85803306}
-            landmarks {key_x : 0.7394606 key_y : 0.3209864 score : 0.84626555}
-            landmarks {key_x : 0.69045323 key_y : 0.54254323 score : 0.35415077}
-            landmarks {key_x : 0.69133437 key_y : 0.52659225 score : 0.5010598}
-            landmarks {key_x : 0.813216 key_y : 0.5792549 score : 0.6837475}
-            landmarks {key_x : 0.81319857 key_y : 0.42052758 score : 0.69535846}
-            landmarks {key_x : 0.8274471 key_y : 0.62838054 score : 0.15943679}
-            landmarks {key_x : 0.8424358 key_y : 0.40062594 score : 0.07926878}
-            landmarks {key_x : 0.7112423 key_y : 0.49748933 score : 0.10836774}
-            landmarks {key_x : 0.80640984 key_y : 0.6251471 score : 0.07497841}
-          )pb");
-
-*/        
-}
 
 class CreateFromOptionsTest : public tflite_shims::testing::Test {};
 
