@@ -132,7 +132,7 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   SUPPORT_ASSERT_OK(result_or);
   const LandmarkResult& result = result_or.value();
 
-  EXPECT_EQ(result[0].key_y(), key_y_golden[0]);
+  EXPECT_EQ(result.key_y(), key_y_golden[0]);
   
 }
 }  // namespace
