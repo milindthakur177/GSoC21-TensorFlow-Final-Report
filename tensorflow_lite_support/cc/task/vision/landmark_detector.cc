@@ -50,7 +50,7 @@ StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
     ASSIGN_OR_RETURN(
         landmark_detector,
         TaskAPIFactory::CreateFromExternalFileProto<LandmarkDetector>(
-            &options_copy->model_file_with_metadata(), std::move(resolver),
+            &options_copy->model_file_with_metadata(),
             options_copy->num_threads(), options_copy->compute_settings()));
   } else if (options_copy->base_options().has_model_file()) {
     ASSIGN_OR_RETURN(landmark_detector,
