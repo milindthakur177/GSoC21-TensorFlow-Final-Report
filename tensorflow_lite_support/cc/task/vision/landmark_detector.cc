@@ -46,16 +46,22 @@ StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
   auto options_copy = absl::make_unique<LandmarkDetectorOptions>(options);
 
   std::unique_ptr<LandmarkDetector> landmark_detector;
-  if (options_copy->base_options().has_model_file()) {
+  if (options_copy->has_model_file_with_metadata()) {
+    ASSIGN_OR_RETURN(
+        landmark_detector,
+        TaskAPIFactory::CreateFromExternalFileProto<LandmarkDetector>(
+            &options_copy->model_file_with_metadata(), std::move(resolver),
+            options_copy->num_threads(), options_copy->compute_settings()));
+  } else if (options_copy->base_options().has_model_file()) {
     ASSIGN_OR_RETURN(landmark_detector,
                      TaskAPIFactory::CreateFromBaseOptions<LandmarkDetector>(
-                         &options_copy->base_options()));
+                         &options_copy->base_options(), std::move(resolver)));
   } else {
     // Should never happen because of SanityCheckOptions.
     return CreateStatusWithPayload(
         StatusCode::kInvalidArgument,
-        absl::StrFormat("Expected exactly one `base_options.model_file`  "
-                        "to be provided, found 0."),
+        absl::StrFormat("Expected exactly one of `base_options.model_file` or "
+                        "`model_file_with_metadata` to be provided, found 0."),
         TfLiteSupportStatus::kInvalidArgumentError);
   }
 
@@ -67,12 +73,13 @@ StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
 /* static */
 absl::Status LandmarkDetector::SanityCheckOptions(
     const LandmarkDetectorOptions& options) {
-  int num_input_models = (options.base_options().has_model_file() ? 1 : 0);
+  int num_input_models = (options.base_options().has_model_file() ? 1 : 0) +
+                         (options.has_model_file_with_metadata() ? 1 : 0);
   if (num_input_models != 1) {
     return CreateStatusWithPayload(
         StatusCode::kInvalidArgument,
-        absl::StrFormat("Expected exactly one `base_options.model_file` "
-                        " to be provided, found %d.",
+        absl::StrFormat("Expected exactly one of `base_options.model_file` or "
+                        "`model_file_with_metadata` to be provided, found %d.",
                         num_input_models),
         TfLiteSupportStatus::kInvalidArgumentError);
   }
