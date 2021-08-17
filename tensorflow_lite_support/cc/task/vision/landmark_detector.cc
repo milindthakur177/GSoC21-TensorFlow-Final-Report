@@ -139,13 +139,11 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
 
 		landmarks->set_key_y(outputs[3*i+0]) ;
 		landmarks->set_key_x(outputs[3*i+1]) ;
-		// landmarks->set_score(outputs[3*i+2]);
+		landmarks->set_score(outputs[3*i+2]);
 
-    total_score = total_score + outputs[3*i +2];
 
   }
-  auto* landmarks = result.add_landmarks();
-  landmarks->set_score(total_score/17);
+  
   return result;
 }
 
