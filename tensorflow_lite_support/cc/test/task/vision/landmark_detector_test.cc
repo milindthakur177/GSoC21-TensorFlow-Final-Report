@@ -96,9 +96,9 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
     golden_x.push_back(result.landmarks(i).key_x());
     golden_score.push_back(result.landmarks(i).score());
   }
-  EXPECT_NEAR(golden_x, key_x_golden,0.1);
-  EXPECT_NEAR(golden_y, key_y_golden,0.1);
-  EXPECT_NEAR(golden_score, score_golden,0.1);
+  EXPECT_FLOAT_EQ(golden_x, key_x_golden,0.1);
+  EXPECT_FLOAT_EQ(golden_y, key_y_golden,0.1);
+  EXPECT_FLOAT_EQ(golden_score, score_golden,0.1);
 
 }
 
