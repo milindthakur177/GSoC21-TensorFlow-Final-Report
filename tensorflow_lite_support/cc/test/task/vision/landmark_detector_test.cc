@@ -100,7 +100,7 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   float total_score=0;
   float avg_score;
   for (int i=0 ; i<17;++i){
-    total_score = total_score +golden_score[i];
+    total_score = total_score +result.landmarks(i).score();
   }
   avg_score = total_score/17;
   EXPECT_NEAR(avg_score, expect_score, 0.1);
