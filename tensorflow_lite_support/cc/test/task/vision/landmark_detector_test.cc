@@ -102,11 +102,11 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
     total_score = total_score +result.landmarks(i).score();
   }
   avg_score = total_score/17;
-  EXPECT_NEAR(avg_score, expect_score, 0.2);
+  EXPECT_NEAR(avg_score, expect_score, 0.1);
   
   for (int i=0 ; i<17 ; ++i){
-    EXPECT_NEAR(golden_x[i], key_x_golden[i],0.2);
-    EXPECT_NEAR(golden_y[i], key_y_golden[i],0.2);
+    EXPECT_NEAR(golden_x[i], key_x_golden[i],0.1);
+    EXPECT_NEAR(golden_y[i], key_y_golden[i],0.1);
   }
 
 }
