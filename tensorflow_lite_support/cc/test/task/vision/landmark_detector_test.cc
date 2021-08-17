@@ -98,9 +98,9 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   }
   
   for (int i=0 ; i<17 ; ++i){
-    EXPECT_NEAR(golden_x[i], key_x_golden[i],0.2);
-    EXPECT_NEAR(golden_y[i], key_y_golden[i],0.2);
-    EXPECT_NEAR(golden_score[i], score_golden[i],0.2);
+    EXPECT_NEAR(golden_x[i], key_x_golden[i],0.1);
+    EXPECT_NEAR(golden_y[i], key_y_golden[i],0.1);
+    EXPECT_NEAR(golden_score[i], score_golden[i],0.1);
   }
 }
 
