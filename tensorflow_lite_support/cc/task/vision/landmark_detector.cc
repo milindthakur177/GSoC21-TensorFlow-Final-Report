@@ -144,8 +144,8 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
     total_score = total_score + outputs[3*i +2];
 
   }
-
-  //landmarks->set_score(total_score/num_keypoints);
+  auto* landmarks = result.add_landmarks();
+  landmarks->set_score(total_score/17);
   return result;
 }
 

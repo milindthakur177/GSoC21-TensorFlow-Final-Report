@@ -97,7 +97,7 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   avg_score = total_score/17;
   EXPECT_NEAR(avg_score, SCORE, 0.1);
   */
-  //EXPECT_NEAR(result.landmarks(0).score(), SCORE, 0.1);
+  EXPECT_NEAR(result.landmarks(0).score(), SCORE, 0.1);
 
 }
 
