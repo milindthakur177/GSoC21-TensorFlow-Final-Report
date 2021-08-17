@@ -48,12 +48,13 @@ constexpr char kTestDataDirectory[] =
 constexpr char kMobileNetFloatWithMetadata[] =
     "movenet.tflite";
 
-std::vector<float> key_y_golden = {0.31545776, 0.29907033, 0.3031672, 0.3031672, 0.30726406, 0.36462, 0.39739484, 0.33184516, 0.4260728, 
+std::vector<float> KEY_Y = {0.31545776, 0.29907033, 0.3031672, 0.3031672, 0.30726406, 0.36462, 0.39739484, 0.33184516, 0.4260728, 
                                     0.27039236, 0.4260728, 0.5080099, 0.561269, 0.34413573, 0.757918, 0.27858606, 0.93817955};
 
-std::vector<float> key_x_golden = {0.44246024, 0.44246024, 0.43426654, 0.4793319, 0.4711382, 0.5571721, 0.49162248, 0.70056206, 0.3564263,
+std::vector<float> KEY_X = {0.44246024, 0.44246024, 0.43426654, 0.4793319, 0.4711382, 0.5571721, 0.49162248, 0.70056206, 0.3564263,
                                     0.8480488, 0.24171439, 0.72924, 0.6841746, 0.87672675, 0.70875573, 0.8644362, 0.70056206};
 
+float SCORE = 0.517;
 
 class DetectTest : public tflite_shims::testing::Test {};
 
@@ -81,33 +82,20 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   SUPPORT_ASSERT_OK(result_or);
 
   const LandmarkResult& result = result_or.value();
-  //float y = result.landmarks(4).key_y();
-  //EXPECT_NEAR(y, key_y_golden[4], 0.1);
-
-  std::vector<float> golden_x;
-  std::vector<float> golden_y;
-  std::vector<float> golden_score;
   
   for (int i =0 ; i<17 ; ++i){
-    golden_y.push_back(result.landmarks(i).key_y());
-    golden_x.push_back(result.landmarks(i).key_x());
-    golden_score.push_back(result.landmarks(i).score());
+    EXPECT_NEAR(result.landmarks(i).key_y(), KEY_Y[i], 0.1);
+    EXPECT_NEAR(result.landmarks(i).key_x(), KEY_X[i], 0.1);
   }
   
-  
-  float expect_score = 0.517;
   float total_score=0;
   float avg_score;
+
   for (int i=0 ; i<17;++i){
     total_score = total_score +result.landmarks(i).score();
   }
   avg_score = total_score/17;
-  EXPECT_NEAR(avg_score, expect_score, 0.1);
-  
-  for (int i=0 ; i<17 ; ++i){
-    EXPECT_NEAR(golden_x[i], key_x_golden[i],0.1);
-    EXPECT_NEAR(golden_y[i], key_y_golden[i],0.1);
-  }
+  EXPECT_NEAR(avg_score, SCORE, 0.1);
 
 }
 
