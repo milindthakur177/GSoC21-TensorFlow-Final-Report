@@ -133,7 +133,9 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
 	
   LandmarkResult result;
   float total_score = 0.0;
-	for(int i =0 ; i<17 ; ++i){
+  int num_keypoints = 17;
+
+	for(int i =0 ; i<num_keypoints ; ++i){
 
     Landmark* landmarks = result.add_landmarks();
 
