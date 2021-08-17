@@ -98,7 +98,7 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   }
   EXPECT_NEAR(golden_x, key_x_golden,0.1);
   EXPECT_NEAR(golden_y, key_y_golden,0.1);
-  EXPECT_NEAR(golden_score, score_golden0.1);
+  EXPECT_NEAR(golden_score, score_golden,0.1);
 
 }
 
