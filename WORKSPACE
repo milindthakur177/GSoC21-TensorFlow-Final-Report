@@ -51,13 +51,9 @@ http_archive(
     ],
 )
 
-# TF on 2021-07-21.
-TENSORFLOW_COMMIT = "01036686e6cc57e6dd25864654e7f864670e5fa9"
-TENSORFLOW_SHA256 = "eeff4ee9c333bf2b17fd694b40c7203c600ce2f3f3df4932536d072f7e0e6e6b"
-# These values come from tensorflow/workspace3.bzl. If the TF commit is updated,
-# these should be updated to match.
-IO_BAZEL_RULES_CLOSURE_COMMIT = "308b05b2419edb5c8ee0471b67a40403df940149"
-IO_BAZEL_RULES_CLOSURE_SHA256 = "5b00383d08dd71f28503736db0500b6fb4dda47489ff5fc6bed42557c07c6ba9"
+# TF on 2021-08-02.
+TENSORFLOW_COMMIT = "b1b4548b3e37c245d7de671aae5b827abde9ba29"
+TENSORFLOW_SHA256 = "5d941518f93eb0fbfb56312f6f32b096ac769068504ff103df582304c86b3a17"
 http_archive(
     name = "org_tensorflow",
     sha256 = TENSORFLOW_SHA256,
@@ -269,18 +265,16 @@ http_archive(
 
 http_archive(
   name = "libedgetpu",
-  sha256 = "d76d18c5a96758dd620057028cdd4e129bd885480087a5c7334070bba3797e58",
-  strip_prefix = "libedgetpu-14eee1a076aa1af7ec1ae3c752be79ae2604a708",
+  sha256 = "a179016a5874c58db969a5edd3fecf57610604e751b5c4d6d82ad58c383ffd64",
+  strip_prefix = "libedgetpu-ea1eaddbddece0c9ca1166e868f8fd03f4a3199e",
   urls = [
-    "https://github.com/google-coral/libedgetpu/archive/14eee1a076aa1af7ec1ae3c752be79ae2604a708.tar.gz"
+    "https://github.com/google-coral/libedgetpu/archive/ea1eaddbddece0c9ca1166e868f8fd03f4a3199e.tar.gz"
   ],
 )
 
 # Set up TensorFlow version for Coral.
 load("@libedgetpu//:workspace.bzl", "libedgetpu_dependencies")
-libedgetpu_dependencies(TENSORFLOW_COMMIT, TENSORFLOW_SHA256,
-                        IO_BAZEL_RULES_CLOSURE_COMMIT,
-                        IO_BAZEL_RULES_CLOSURE_SHA256)
+libedgetpu_dependencies(TENSORFLOW_COMMIT, TENSORFLOW_SHA256)
 
 # AutoValue 1.6+ shades Guava, Auto Common, and JavaPoet. That's OK
 # because none of these jars become runtime dependencies.
