@@ -87,7 +87,7 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
     EXPECT_NEAR(result.landmarks(i).key_y(), KEY_Y[i], 0.1);
     EXPECT_NEAR(result.landmarks(i).key_x(), KEY_X[i], 0.1);
   }
-  
+  /*
   float total_score=0;
   float avg_score;
 
@@ -96,6 +96,8 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   }
   avg_score = total_score/17;
   EXPECT_NEAR(avg_score, SCORE, 0.1);
+  */
+  EXPECT_NEAR(result.landmarks.score(), SCORE, 0.1);
 
 }
 
