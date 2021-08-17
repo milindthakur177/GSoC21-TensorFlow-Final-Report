@@ -48,14 +48,14 @@ constexpr char kTestDataDirectory[] =
 constexpr char kMobileNetFloatWithMetadata[] =
     "lite-model_movenet_singlepose_lightning_tflite_int8_4_with_metadata.tflite";
 
-std::vector<float> key_y_golden = {0.1442298, 0.1300826, 0.13248327, 0.14726797, 0.15074761, 0.2509237, 0.25660858, 0.34447512, 0.35794544,
-                                    0.4101003, 0.44464612, 0.4826307, 0.4889217, 0.6693059, 0.6870472, 0.82553387, 0.86639106};
+std::vector<float> key_y_golden = {0.45065394, 0.44655707, 0.46704134, 0.45884764, 0.49981618, 0.44246024, 0.54897845, 0.3482326, 0.6309155, 
+                                    0.27448922, 0.7128526, 0.4711382, 0.5448816, 0.61043125, 0.62681866, 0.7128526, 0.7210463};
 
-std::vector<float> key_x_golden = {0.5040901, 0.51998615, 0.48847437, 0.5424121, 0.4656546, 0.57788885, 0.43163484, 0.6175001, 0.38216457,
-                                    0.60705376, 0.4151504, 0.554312, 0.45635343, 0.54465926, 0.45363468, 0.5266466, 0.42971918};
+std::vector<float> key_x_golden = {0.3113609, 0.30726406, 0.30726406, 0.32365146, 0.3113609, 0.37691057, 0.3564263, 0.37691057, 0.36871687,
+                                    0.36052316, 0.3482326, 0.5080099, 0.46704134, 0.6145281, 0.38920113, 0.67188406, 0.3728137};
 
-std::vector<float> score_golden = {0.44470087, 0.5480462, 0.6591966, 0.3904021, 0.4450525, 0.7143093, 0.6618434, 0.5292502, 0.689163, 
-                                    0.48138157, 0.64457417, 0.71147513, 0.6135119, 0.51524675, 0.6072499, 0.5642306, 0.5547067};
+std::vector<float> score_golden = {0.49981618, 0.6350124, 0.70056206, 0.6350124, 0.70056206, 0.6350124, 0.6350124, 0.6350124, 0.5694627,
+                                    0.5694627, 0.75382113, 0.8029834, 0.5694627, 0.6350124, 0.70056206, 0.8029834, 0.43016967};
 
 
 class DetectTest : public tflite_shims::testing::Test {};
@@ -66,7 +66,7 @@ StatusOr<ImageData> LoadImage(std::string image_name) {
 }
 
 TEST_F(DetectTest, SucceedsWithFloatModel) {
-  SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("womanstanding.jpg"));
+  SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("yoga.png"));
   std::unique_ptr<FrameBuffer> frame_buffer = CreateFromRgbRawBuffer(
       rgb_image.pixel_data,
       FrameBuffer::Dimension{rgb_image.width, rgb_image.height});
