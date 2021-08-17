@@ -48,14 +48,11 @@ constexpr char kTestDataDirectory[] =
 constexpr char kMobileNetFloatWithMetadata[] =
     "movenet.tflite";
 
-std::vector<float> key_y_golden = {0.45065394, 0.44655707, 0.46704134, 0.45884764, 0.49981618, 0.44246024, 0.54897845, 0.3482326, 0.6309155, 
-                                    0.27448922, 0.7128526, 0.4711382, 0.5448816, 0.61043125, 0.62681866, 0.7128526, 0.7210463};
+std::vector<float> key_y_golden = {0.31545776, 0.29907033, 0.3031672, 0.3031672, 0.30726406, 0.36462, 0.39739484, 0.33184516, 0.4260728, 
+                                    0.27039236, 0.4260728, 0.5080099, 0.561269, 0.34413573, 0.757918, 0.27858606, 0.93817955};
 
-std::vector<float> key_x_golden = {0.3113609, 0.30726406, 0.30726406, 0.32365146, 0.3113609, 0.37691057, 0.3564263, 0.37691057, 0.36871687,
-                                    0.36052316, 0.3482326, 0.5080099, 0.46704134, 0.6145281, 0.38920113, 0.67188406, 0.3728137};
-
-std::vector<float> score_golden = {0.49981618, 0.6350124, 0.70056206, 0.6350124, 0.70056206, 0.6350124, 0.6350124, 0.6350124, 0.5694627,
-                                    0.5694627, 0.75382113, 0.8029834, 0.5694627, 0.6350124, 0.70056206, 0.8029834, 0.43016967};
+std::vector<float> key_x_golden = {0.44246024, 0.44246024, 0.43426654, 0.4793319, 0.4711382, 0.5571721, 0.49162248, 0.70056206, 0.3564263,
+                                    0.8480488, 0.24171439, 0.72924, 0.6841746, 0.87672675, 0.70875573, 0.8644362, 0.70056206};
 
 
 class DetectTest : public tflite_shims::testing::Test {};
@@ -66,7 +63,7 @@ StatusOr<ImageData> LoadImage(std::string image_name) {
 }
 
 TEST_F(DetectTest, SucceedsWithFloatModel) {
-  SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("yoga.png"));
+  SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("yogagirl.jpg"));
   std::unique_ptr<FrameBuffer> frame_buffer = CreateFromRgbRawBuffer(
       rgb_image.pixel_data,
       FrameBuffer::Dimension{rgb_image.width, rgb_image.height});
@@ -98,18 +95,18 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   }
   
   
-  float expect_score = 0.64;
+  float expect_score = 0.517;
   float total_score=0;
   float avg_score;
   for (int i=0 ; i<17;++i){
     total_score = total_score +result.landmarks(i).score();
   }
   avg_score = total_score/17;
-  EXPECT_NEAR(avg_score, expect_score, 0.25);
+  EXPECT_NEAR(avg_score, expect_score, 0.2);
   
   for (int i=0 ; i<17 ; ++i){
-    EXPECT_NEAR(golden_x[i], key_x_golden[i],0.25);
-    EXPECT_NEAR(golden_y[i], key_y_golden[i],0.25);
+    EXPECT_NEAR(golden_x[i], key_x_golden[i],0.2);
+    EXPECT_NEAR(golden_y[i], key_y_golden[i],0.2);
   }
 
 }
