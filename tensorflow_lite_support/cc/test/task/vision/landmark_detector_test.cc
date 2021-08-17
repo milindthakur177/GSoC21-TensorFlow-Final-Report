@@ -85,7 +85,7 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
 
   const LandmarkResult& result = result_or.value();
   float y = result.landmarks(4).key_y();
-  EXPECT_FLOAT_EQ(y, key_y_golden[4]);
+  EXPECT_NEAR(y, key_y_golden[4], 0.1);
 /*
   std::vector<float> golden_x;
   std::vector<float> golden_y;
