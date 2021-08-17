@@ -132,9 +132,10 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
   const float* outputs = AssertAndReturnTypedTensor<float>(output_tensor);
 	
   LandmarkResult result;
+  Landmark* landmarks = result.add_landmarks();
 	for(int i =0 ; i<num_keypoints ; ++i){
 
-    Landmark* landmarks = result.add_landmarks();
+    //Landmark* landmarks = result.add_landmarks();
 
 		landmarks->set_key_y(outputs[3*i+0]) ;
 		landmarks->set_key_x(outputs[3*i+1]) ;
