@@ -77,9 +77,7 @@ cc_library(
 proto_library(
     name = "landmarks_proto",
     srcs = ["landmarks.proto"],
-    deps = [
-        ":class_proto",
-    ],
+   
     
 )
 
