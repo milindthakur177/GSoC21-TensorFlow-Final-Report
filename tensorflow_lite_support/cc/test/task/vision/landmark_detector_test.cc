@@ -46,7 +46,7 @@ constexpr char kTestDataDirectory[] =
     "tensorflow_lite_support/cc/test/testdata/task/vision/";
 
 constexpr char kMobileNetFloatWithMetadata[] =
-    "lite-model_movenet_singlepose_lightning_tflite_int8_4_with_metadata.tflite";
+    "movenet.tflite";
 
 std::vector<float> key_y_golden = {0.45065394, 0.44655707, 0.46704134, 0.45884764, 0.49981618, 0.44246024, 0.54897845, 0.3482326, 0.6309155, 
                                     0.27448922, 0.7128526, 0.4711382, 0.5448816, 0.61043125, 0.62681866, 0.7128526, 0.7210463};
