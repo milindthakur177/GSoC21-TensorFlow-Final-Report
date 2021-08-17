@@ -88,14 +88,14 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   const LandmarkResult& result = result_or.value();
   
   for (int i =0 ; i<num_keypoints ; ++i){
-    EXPECT_NEAR(result.landmarks(i).key_y(), KEY_Y[i], 0.05);
-    EXPECT_NEAR(result.landmarks(i).key_x(), KEY_X[i], 0.05);
+    EXPECT_NEAR(result.landmarks(i).key_y(), KEY_Y[i], 0.1);
+    EXPECT_NEAR(result.landmarks(i).key_x(), KEY_X[i], 0.1);
     
     total_score = total_score +result.landmarks(i).score();
   }
 
   avg_score = total_score/17;
-  EXPECT_NEAR(avg_score, AVG_SCORE, 0.05);
+  EXPECT_NEAR(avg_score, AVG_SCORE, 0.1);
   
 
 }
