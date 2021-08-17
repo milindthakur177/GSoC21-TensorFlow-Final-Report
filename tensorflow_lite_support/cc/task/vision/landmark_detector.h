@@ -60,11 +60,7 @@ class LandmarkDetector : public BaseVisionTaskApi<LandmarkResult> {
   // Performs pre-initialization actions.
   virtual absl::Status PreInit();
 
- private:
-
-  int num_keypoints = 17;
-
-  float total_score = 0;
+ 
 
 };
 

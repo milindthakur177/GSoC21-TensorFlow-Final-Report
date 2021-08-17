@@ -132,7 +132,7 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
   const float* outputs = AssertAndReturnTypedTensor<float>(output_tensor);
 	
   LandmarkResult result;
-  
+  float total_score = 0.0;
 	for(int i =0 ; i<17 ; ++i){
 
     Landmark* landmarks = result.add_landmarks();
