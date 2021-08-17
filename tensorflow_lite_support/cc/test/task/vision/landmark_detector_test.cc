@@ -90,16 +90,18 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   std::vector<double> golden_x;
   std::vector<double> golden_y;
   std::vector<double> golden_score;
-
+  /*
   for (int i =0 ; i<17 ; ++i){
     golden_y.push_back(result.landmarks(i).key_y());
     golden_x.push_back(result.landmarks(i).key_x());
     golden_score.push_back(result.landmarks(i).score());
   }
-  EXPECT_FLOAT_EQ(golden_x, key_x_golden,0.1);
-  EXPECT_FLOAT_EQ(golden_y, key_y_golden,0.1);
-  EXPECT_FLOAT_EQ(golden_score, score_golden,0.1);
-
+  */
+  for (int i=0 ; i<17 ; ++i){
+    EXPECT_NEAR(golden_x[i], key_x_golden[i],0.1);
+    EXPECT_NEAR(golden_y[i], key_y_golden[i],0.1);
+    EXPECT_NEAR(golden_score[i], score_golden[i],0.1);
+  }
 }
 
 class CreateFromOptionsTest : public tflite_shims::testing::Test {};
