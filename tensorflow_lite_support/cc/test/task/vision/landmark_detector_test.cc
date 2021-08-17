@@ -96,9 +96,9 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
     golden_x.push_back(result.landmarks(i).key_x());
     golden_score.push_back(result.landmarks(i).score());
   }
-  cout << "Output of begin and end: ";
+  std::cout << "Output of begin and end: ";
   for (auto i = golden_score.begin(); i != golden_score.end(); ++i)
-  cout << *i << " ";
+  std::cout << *i << " ";
   /*
   float expect_score = 0.64;
   float total_score=0;
