@@ -40,7 +40,9 @@ using ::tflite::task::core::PopulateTensor;
 using ::tflite::task::core::TaskAPIFactory;
 using ::tflite::task::core::TfLiteEngine;
 
-int numKeyPoints = 17;
+int num_keypoints = 17;
+float total_score=0.0;
+float avg_score;
 
 constexpr char kTestDataDirectory[] =
     "tensorflow_lite_support/cc/test/testdata/task/vision/";
@@ -85,22 +87,16 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
 
   const LandmarkResult& result = result_or.value();
   
-  for (int i =0 ; i<17 ; ++i){
-    EXPECT_NEAR(result.landmarks(i).key_y(), KEY_Y[i], 0.1);
-    EXPECT_NEAR(result.landmarks(i).key_x(), KEY_X[i], 0.1);
-    //EXPECT_NEAR(result.landmarks(i).score(), SCORE[i], 0.1);
-  }
-  
-  float total_score=0.0;
-  float avg_score;
-
-  for (int i=0 ; i<17;++i){
+  for (int i =0 ; i<num_keypoints ; ++i){
+    EXPECT_NEAR(result.landmarks(i).key_y(), KEY_Y[i], 0.05);
+    EXPECT_NEAR(result.landmarks(i).key_x(), KEY_X[i], 0.05);
+    
     total_score = total_score +result.landmarks(i).score();
   }
+
   avg_score = total_score/17;
-  EXPECT_NEAR(avg_score, AVG_SCORE, 0.1);
+  EXPECT_NEAR(avg_score, AVG_SCORE, 0.05);
   
-  //EXPECT_NEAR(result.landmarks(0).score(), SCORE, 0.1);
 
 }
 
