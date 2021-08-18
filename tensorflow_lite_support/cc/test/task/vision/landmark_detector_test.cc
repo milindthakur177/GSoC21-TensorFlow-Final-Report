@@ -50,13 +50,13 @@ constexpr char kTestDataDirectory[] =
 constexpr char kMobileNetFloatWithMetadata[] =
     "movenet.tflite";
 
-std::vector<float> KEY_Y = {0.31545776, 0.29907033, 0.3031672, 0.3031672, 0.30726406, 0.36462, 0.39739484, 0.33184516, 0.4260728, 
-                                    0.27039236, 0.4260728, 0.5080099, 0.561269, 0.34413573, 0.757918, 0.27858606, 0.93817955};
+std::vector<float> KEY_Y = {0.31545776, 0.29907033, 0.3031672, 0.3031672, 0.30726406,0.3482326, 0.4096854, 0.30726406, 0.4260728, 
+                                    0.2581018, 0.4260728, 0.49162248, 0.5530753, 0.34413573, 0.73333687, 0.27858606, 0.9299859};
 
-std::vector<float> KEY_X = {0.44246024, 0.44246024, 0.43426654, 0.4793319, 0.4711382, 0.5571721, 0.49162248, 0.70056206, 0.3564263,
-                                    0.8480488, 0.24171439, 0.72924, 0.6841746, 0.87672675, 0.70875573, 0.8644362, 0.70056206};
+std::vector<float> KEY_X = {0.4260728, 0.44246024, 0.44655707, 0.48752564, 0.47523507, 0.589947 ,0.48342878,0.72514313, 0.34413573,
+                                    0.8357582, 0.24581124,0.73743373, 0.6841746, 0.88492055, 0.7210463, 0.8644362, 0.7128526};
 
-std::vector<float> SCORE = {0.5, 0.5, 0.43, 0.635, 0.3, 0.57, 0.635, 0.245, 0.635,0.635, 0.5, 0.57, 0.7,0.43, 0.92,0.43,0.57};
+std::vector<float> SCORE = {0.70, 0.635, 0.245, 0.88, 0.753, 0.753, 0.90, 0.925, 0.88, 0.753, 0.80, 0.80, 0.843, 0.80, 0.966, 0.635, 0.942};
 
 float AVG_SCORE = 0.5417;
 
@@ -68,7 +68,7 @@ StatusOr<ImageData> LoadImage(std::string image_name) {
 }
 
 TEST_F(DetectTest, SucceedsWithFloatModel) {
-  SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("yogagirl.jpg"));
+  SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("girl.jpg"));
   std::unique_ptr<FrameBuffer> frame_buffer = CreateFromRgbRawBuffer(
       rgb_image.pixel_data,
       FrameBuffer::Dimension{rgb_image.width, rgb_image.height});
@@ -90,12 +90,12 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   for (int i =0 ; i<num_keypoints ; ++i){
     EXPECT_NEAR(result.landmarks(i).key_y(), KEY_Y[i], 0.1);
     EXPECT_NEAR(result.landmarks(i).key_x(), KEY_X[i], 0.1);
-    
-    total_score = total_score +result.landmarks(i).score();
+    EXPECT_NEAR(result.landmarks(i).score(), SCORE[i], 0.1);
+    //total_score = total_score +result.landmarks(i).score();
   }
 
-  avg_score = total_score/17;
-  EXPECT_NEAR(avg_score, AVG_SCORE, 0.1);
+  //avg_score = total_score/17;
+  //EXPECT_NEAR(avg_score, AVG_SCORE, 0.1);
   
 
 }
