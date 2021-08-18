@@ -58,7 +58,7 @@ std::vector<float> KEY_X = {0.4260728, 0.44246024, 0.44655707, 0.48752564, 0.475
 
 std::vector<float> SCORE = {0.70, 0.635, 0.245, 0.88, 0.753, 0.753, 0.90, 0.925, 0.88, 0.753, 0.80, 0.80, 0.843, 0.80, 0.966, 0.635, 0.942};
 
-float AVG_SCORE = 0.5417;
+float AVG_SCORE = 0.776;
 
 class DetectTest : public tflite_shims::testing::Test {};
 
@@ -90,12 +90,12 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   for (int i =0 ; i<num_keypoints ; ++i){
     EXPECT_NEAR(result.landmarks(i).key_y(), KEY_Y[i], 0.1);
     EXPECT_NEAR(result.landmarks(i).key_x(), KEY_X[i], 0.1);
-    EXPECT_NEAR(result.landmarks(i).score(), SCORE[i], 0.1);
-    //total_score = total_score +result.landmarks(i).score();
+    //EXPECT_NEAR(result.landmarks(i).score(), SCORE[i], 0.1);
+    total_score = total_score +result.landmarks(i).score();
   }
 
-  //avg_score = total_score/17;
-  //EXPECT_NEAR(avg_score, AVG_SCORE, 0.1);
+  avg_score = total_score/17;
+  EXPECT_NEAR(avg_score, AVG_SCORE, 0.1);
   
 
 }
