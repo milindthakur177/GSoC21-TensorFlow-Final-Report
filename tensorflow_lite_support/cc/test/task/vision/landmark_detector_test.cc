@@ -90,7 +90,7 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   for (int i =0 ; i<num_keypoints ; ++i){
     EXPECT_NEAR(result.landmarks(i).key_y(), KEY_Y[i], 0.1);
     EXPECT_NEAR(result.landmarks(i).key_x(), KEY_X[i], 0.1);
-    //EXPECT_NEAR(result.landmarks(i).score(), SCORE[i], 0.1);
+    EXPECT_NEAR(result.landmarks(i).score(), SCORE[i], 0.1);
     total_score = total_score +result.landmarks(i).score();
   }
 
