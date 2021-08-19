@@ -48,7 +48,7 @@ constexpr char kTestDataDirectory[] =
     "tensorflow_lite_support/cc/test/testdata/task/vision/";
 
 constexpr char kMobileNetFloatWithMetadata[] =
-    "model32_metadatav2.tflite";
+    "movenet_lightening_with_metadata.tflite";
 
 std::vector<float> KEY_Y = {0.31545776, 0.29907033, 0.3031672, 0.3031672, 0.30726406,0.3482326, 0.4096854, 0.30726406, 0.4260728, 
                                     0.2581018, 0.4260728, 0.49162248, 0.5530753, 0.34413573, 0.73333687, 0.27858606, 0.9299859};
@@ -68,7 +68,7 @@ StatusOr<ImageData> LoadImage(std::string image_name) {
 }
 
 TEST_F(DetectTest, SucceedsWithFloatModel) {
-  SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("girl32.jpg"));
+  SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("girl.jpg"));
   std::unique_ptr<FrameBuffer> frame_buffer = CreateFromRgbRawBuffer(
       rgb_image.pixel_data,
       FrameBuffer::Dimension{rgb_image.width, rgb_image.height});
