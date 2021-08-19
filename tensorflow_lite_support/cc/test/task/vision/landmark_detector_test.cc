@@ -86,7 +86,19 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   SUPPORT_ASSERT_OK(result_or);
 
   const LandmarkResult& result = result_or.value();
-  
+	std::vector<float> result_x;
+	std::vector<float> result_y;
+	std::vector<float> result_score;
+  for( int i=0; i<17; ++i){
+		result_x.push_back(result.landmarks(i).key_x());
+		result_y.push_back(result.landmarks(i).key_y());
+		result_score.push_back(result.landmarks(i).score());
+	}
+
+	EXPECT_EQ(result_x,KEY_X);
+	EXPECT_EQ(result_y,KEY_Y);
+	EXPECT_EQ(result_score,SCORE);
+/*
   for (int i =0 ; i<num_keypoints ; ++i){
     EXPECT_NEAR(result.landmarks(i).key_y(), KEY_Y[i], 0.1);
     EXPECT_NEAR(result.landmarks(i).key_x(), KEY_X[i], 0.1);
@@ -97,7 +109,7 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   avg_score = total_score/17;
   EXPECT_NEAR(avg_score, AVG_SCORE, 0.1);
   
-
+*/
 }
 
 class CreateFromOptionsTest : public tflite_shims::testing::Test {};
