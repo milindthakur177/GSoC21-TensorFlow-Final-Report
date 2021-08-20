@@ -47,6 +47,13 @@ cc_library_with_tflite(
         "@org_tensorflow//tensorflow/lite/core/api",
     ],
 )
+
+# IMPORTANT: in order to use hardware acceleration delegates, configurable through the
+# `compute_settings` field of the LandmarkDetectorOptions, you must additionally link to
+# the appropriate delegate plugin target (e.g. `gpu_plugin` for GPU) from:
+# https://github.com/tensorflow/tensorflow/blob/master/tensorflow/lite/experimental/acceleration/configuration/BUILD
+# To use EDGETPU_CORAL, link to `edgetpu_coral_plugin` from:
+# https://github.com/tensorflow/tflite-support/blob/a58a4f9225c411fa9ba29f821523e6e283988d23/tensorflow_lite_support/acceleration/configuration/BUILD#L11
 cc_library_with_tflite(
     name = "landmark_detector",
     srcs = ["landmark_detector.cc"],

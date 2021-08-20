@@ -183,9 +183,6 @@ cc_library(
 proto_library(
     name = "landmarks_proto",
     srcs = ["landmarks.proto"],
-    deps = [
-        ":class_proto",
-    ],
 )
 
 cc_proto_library(
@@ -199,7 +196,6 @@ cc_library(
     name = "landmarks_proto_inc",
     hdrs = ["landmarks_proto_inc.h"],
     deps = [
-        ":class_proto_inc",
         ":landmarks_cc_proto",
     ],
 )
