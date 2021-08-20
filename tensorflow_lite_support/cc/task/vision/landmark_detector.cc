@@ -79,7 +79,7 @@ StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
   return landmark_detector;
 }
 
-/* static 
+/* static */
 absl::Status LandmarkDetector::SanityCheckOptions(
     const LandmarkDetectorOptions& options) {
   int num_input_models = (options.base_options().has_model_file() ? 1 : 0);
@@ -87,15 +87,15 @@ absl::Status LandmarkDetector::SanityCheckOptions(
   if (num_input_models != 1) {
     return CreateStatusWithPayload(
         StatusCode::kInvalidArgument,
-        absl::StrFormat("Expected exactly one of `base_options.model_file` or "
-                        "`model_file_with_metadata` to be provided, found %d.",
+        absl::StrFormat("Expected exactly one `base_options.model_file` "
+                        "to be provided, found %d.",
                         num_input_models),
         TfLiteSupportStatus::kInvalidArgumentError);
   }
  
   return absl::OkStatus();
 }
-*/
+
 absl::Status LandmarkDetector::Init(
     std::unique_ptr<LandmarkDetectorOptions> options) {
   // Set options.

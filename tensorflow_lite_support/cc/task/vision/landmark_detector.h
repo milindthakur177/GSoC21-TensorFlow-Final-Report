@@ -108,7 +108,7 @@ class LandmarkDetector : public BaseVisionTaskApi<LandmarkResult> {
       const FrameBuffer& frame_buffer, const BoundingBox& roi) override;
 
   // Performs sanity checks on the provided LandmarkDetectorOptions.
-  //static absl::Status SanityCheckOptions(const LandmarkDetectorOptions& options);
+  static absl::Status SanityCheckOptions(const LandmarkDetectorOptions& options);
 
   // Initializes the LandmarkDetector from the provided LandmarkDetectorOptions,
   // whose ownership is transferred to this object.
