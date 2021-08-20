@@ -1,3 +1,18 @@
+/* Copyright 2020 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+    
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
 #include "tensorflow_lite_support/cc/task/vision/landmark_detector.h"
 
 #include "absl/algorithm/container.h"
@@ -34,6 +49,9 @@ using ::tflite::task::core::TfLiteEngine;
 
 }  // namespace
 
+// Number of Keypoints
+int num_keypoints = 17;
+
 /* static */
 StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
     const LandmarkDetectorOptions& options) {
@@ -43,13 +61,7 @@ StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
   auto options_copy = absl::make_unique<LandmarkDetectorOptions>(options);
 
   std::unique_ptr<LandmarkDetector> landmark_detector;
-  if (options_copy->has_model_file_with_metadata()) {
-    ASSIGN_OR_RETURN(
-        landmark_detector,
-        TaskAPIFactory::CreateFromExternalFileProto<LandmarkDetector>(
-            &options_copy->model_file_with_metadata()
-            ));
-  } else if (options_copy->base_options().has_model_file()) {
+  if (options_copy->base_options().has_model_file()) {
     ASSIGN_OR_RETURN(landmark_detector,
                      TaskAPIFactory::CreateFromBaseOptions<LandmarkDetector>(
                          &options_copy->base_options()));
@@ -70,8 +82,8 @@ StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
 /* static */
 absl::Status LandmarkDetector::SanityCheckOptions(
     const LandmarkDetectorOptions& options) {
-  int num_input_models = (options.base_options().has_model_file() ? 1 : 0) +
-                         (options.has_model_file_with_metadata() ? 1 : 0);
+  int num_input_models = (options.base_options().has_model_file() ? 1 : 0);
+                         
   if (num_input_models != 1) {
     return CreateStatusWithPayload(
         StatusCode::kInvalidArgument,
@@ -95,7 +107,6 @@ absl::Status LandmarkDetector::Init(
 
   // Sanity check and set inputs and outputs.
   RETURN_IF_ERROR(CheckAndSetInputs());
-
 
   return absl::OkStatus();
 }
@@ -133,8 +144,6 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
   const float* outputs = AssertAndReturnTypedTensor<float>(output_tensor);
 	
   LandmarkResult result;
-  float total_score = 0.0;
-  int num_keypoints = 17;
 
 	for(int i =0 ; i<num_keypoints ; ++i){
 
@@ -144,13 +153,12 @@ StatusOr<LandmarkResult> LandmarkDetector::Postprocess(
 		landmarks->set_key_x(outputs[3*i+1]);
 		landmarks->set_score(outputs[3*i+2]);
 
-
   }
   
   return result;
 }
 
 
-} 
-}  
-}
+}  // namespace vision
+}  // namespace task
+}  // namespace tflite

@@ -1,3 +1,18 @@
+/* Copyright 2020 The TensorFlow Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+==============================================================================*/
+
 #include "tensorflow_lite_support/cc/task/vision/landmark_detector.h"
 
 #include <memory>
@@ -40,76 +55,32 @@ using ::tflite::task::core::PopulateTensor;
 using ::tflite::task::core::TaskAPIFactory;
 using ::tflite::task::core::TfLiteEngine;
 
+// Number of keypoints
 int num_keypoints = 17;
-float total_score=0.0;
-float avg_score;
 
 constexpr char kTestDataDirectory[] =
     "tensorflow_lite_support/cc/test/testdata/task/vision/";
 
+// Float model.
 constexpr char kMobileNetFloatWithMetadata[] =
-    "movenet_lightening_with_metadata.tflite";
+    "lite-model_movenet_singlepose_lightning_tflite_int8_4_with_metadata.tflite";
 
-std::vector<float> KEY_Y = {0.31545776, 0.29907033, 0.3031672, 0.3031672, 0.30726406,0.3482326, 0.4096854, 0.30726406, 0.4260728, 
+// List of expected y coordinates of each keypoint
+std::vector<float> GOLDEN_KEY_Y = {0.31545776, 0.29907033, 0.3031672, 0.3031672, 0.30726406,0.3482326, 0.4096854, 0.30726406, 0.4260728, 
                                     0.2581018, 0.4260728, 0.49162248, 0.5530753, 0.34413573, 0.73333687, 0.27858606, 0.9299859};
 
-std::vector<float> KEY_X = {0.4260728, 0.44246024, 0.44655707, 0.48752564, 0.47523507, 0.589947 ,0.48342878,0.72514313, 0.34413573,
+// List of expected x coordinates of each keypoint
+std::vector<float> GOLDEN_KEY_X = {0.4260728, 0.44246024, 0.44655707, 0.48752564, 0.47523507, 0.589947 ,0.48342878,0.72514313, 0.34413573,
                                     0.8357582, 0.24581124,0.73743373, 0.6841746, 0.88492055, 0.7210463, 0.8644362, 0.7128526};
 
-std::vector<float> SCORE = {0.70, 0.635, 0.245, 0.88, 0.753, 0.753, 0.90, 0.925, 0.88, 0.753, 0.80, 0.80, 0.843, 0.80, 0.966, 0.635, 0.942};
+// List of expected scores of each keypoint
+std::vector<float> GOLDEN_SCORE = {0.70056206, 0.6350124, 0.24581124, 0.8808236, 0.75382113, 0.75382113, 0.90540475, 0.925889, 0.8808236, 
+                                    0.75382113, 0.8029834, 0.8029834, 0.84395194, 0.8029834, 0.96685755, 0.6350124, 0.9422764};
 
-float AVG_SCORE = 0.776;
-
-class DetectTest : public tflite_shims::testing::Test {};
 
 StatusOr<ImageData> LoadImage(std::string image_name) {
   return DecodeImageFromFile(JoinPath("./" /*test src dir*/,
                                       kTestDataDirectory, image_name));
-}
-
-TEST_F(DetectTest, SucceedsWithFloatModel) {
-  SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("girl.jpg"));
-  std::unique_ptr<FrameBuffer> frame_buffer = CreateFromRgbRawBuffer(
-      rgb_image.pixel_data,
-      FrameBuffer::Dimension{rgb_image.width, rgb_image.height});
-
-  LandmarkDetectorOptions options;
-  options.mutable_base_options()->mutable_model_file()->set_file_name(
-      JoinPath( "./" /*test src dir*/,kTestDataDirectory,
-               kMobileNetFloatWithMetadata));
-  SUPPORT_ASSERT_OK_AND_ASSIGN(std::unique_ptr<LandmarkDetector> landmark_detector,
-                       LandmarkDetector::CreateFromOptions(options));
-  
-  StatusOr<LandmarkResult> result_or =
-      landmark_detector->Detect(*frame_buffer);
-  ImageDataFree(&rgb_image);
-  SUPPORT_ASSERT_OK(result_or);
-
-  const LandmarkResult& result = result_or.value();
-	std::vector<float> result_x;
-	std::vector<float> result_y;
-	std::vector<float> result_score;
-  for( int i=0; i<17; ++i){
-		result_x.push_back(result.landmarks(i).key_x());
-		result_y.push_back(result.landmarks(i).key_y());
-		result_score.push_back(result.landmarks(i).score());
-	}
-
-	EXPECT_EQ(result_x,KEY_X);
-	EXPECT_EQ(result_y,KEY_Y);
-	EXPECT_EQ(result_score,SCORE);
-/*
-  for (int i =0 ; i<num_keypoints ; ++i){
-    EXPECT_NEAR(result.landmarks(i).key_y(), KEY_Y[i], 0.1);
-    EXPECT_NEAR(result.landmarks(i).key_x(), KEY_X[i], 0.1);
-    EXPECT_NEAR(result.landmarks(i).score(), SCORE[i], 0.1);
-    total_score = total_score +result.landmarks(i).score();
-  }
-
-  avg_score = total_score/17;
-  EXPECT_NEAR(avg_score, AVG_SCORE, 0.1);
-  
-*/
 }
 
 class CreateFromOptionsTest : public tflite_shims::testing::Test {};
@@ -117,9 +88,7 @@ class CreateFromOptionsTest : public tflite_shims::testing::Test {};
 
 TEST_F(CreateFromOptionsTest, FailsWithTwoModelSources) {
   LandmarkDetectorOptions options;
-  options.mutable_model_file_with_metadata()->set_file_name(
-      JoinPath("./" /*test src dir*/, kTestDataDirectory,
-               kMobileNetFloatWithMetadata));
+
   options.mutable_base_options()->mutable_model_file()->set_file_name(
       JoinPath("./" /*test src dir*/, kTestDataDirectory,
                kMobileNetFloatWithMetadata));
@@ -151,6 +120,37 @@ TEST_F(CreateFromOptionsTest, FailsWithMissingModel) {
   EXPECT_THAT(landmark_detector_or.status().GetPayload(kTfLiteSupportPayload),
               Optional(absl::Cord(
                   absl::StrCat(TfLiteSupportStatus::kInvalidArgumentError))));
+}
+
+class DetectTest : public tflite_shims::testing::Test {};
+
+TEST_F(DetectTest, SucceedsWithFloatModel) {
+  SUPPORT_ASSERT_OK_AND_ASSIGN(ImageData rgb_image, LoadImage("girl.jpg"));
+  std::unique_ptr<FrameBuffer> frame_buffer = CreateFromRgbRawBuffer(
+      rgb_image.pixel_data,
+      FrameBuffer::Dimension{rgb_image.width, rgb_image.height});
+
+  LandmarkDetectorOptions options;
+  options.mutable_base_options()->mutable_model_file()->set_file_name(
+      JoinPath( "./" /*test src dir*/,kTestDataDirectory,
+               kMobileNetFloatWithMetadata));
+  SUPPORT_ASSERT_OK_AND_ASSIGN(std::unique_ptr<LandmarkDetector> landmark_detector,
+                       LandmarkDetector::CreateFromOptions(options));
+  
+  StatusOr<LandmarkResult> result_or =
+      landmark_detector->Detect(*frame_buffer);
+  ImageDataFree(&rgb_image);
+  SUPPORT_ASSERT_OK(result_or);
+
+  const LandmarkResult& result = result_or.value();
+
+  for (int i =0 ; i<num_keypoints ; ++i){
+    EXPECT_NEAR(result.landmarks(i).key_y(), KEY_Y[i], 0.05);
+    EXPECT_NEAR(result.landmarks(i).key_x(), KEY_X[i], 0.05);
+    EXPECT_NEAR(result.landmarks(i).score(), SCORE[i], 0.2);
+    
+  }
+  
 }
 
 
