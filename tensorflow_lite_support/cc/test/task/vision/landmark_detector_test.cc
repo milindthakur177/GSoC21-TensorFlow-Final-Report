@@ -65,6 +65,26 @@ constexpr char kTestDataDirectory[] =
 constexpr char kMobileNetFloatWithMetadata[] =
     "lite-model_movenet_singlepose_lightning_tflite_int8_4_with_metadata.tflite";
 
+constexpr char kExpectResults[] =
+    R"pb( landmarks {key_y : 0.31545776 key_x : 0.4260728 score : 0.70056206}
+          landmarks {key_y : 0.29907033 key_x : 0.44246024 score : 0.6350124}
+          landmarks {key_y : 0.3031672 key_x : 0.44655707 score : 0.24581124}
+          landmarks {key_y : 0.3031672 key_x : 0.48752564 score : 0.8808236}
+          landmarks {key_y : 0.3031672 key_x : 0.47523507 score : 0.75382113}
+          landmarks {key_y : 0.3482326 key_x : 0.589947 score : 0.75382113}
+          landmarks {key_y : 0.4096854 key_x : 0.48342878 score : 0.90540475}
+          landmarks {key_y : 0.30726406 key_x : 0.72514313 score : 0.925889}
+          landmarks {key_y : 0.4260728 key_x : 0.34413573 score : 0.8808236}
+          landmarks {key_y : 0.2581018 key_x : 0.8357582 score : 0.75382113}
+          landmarks {key_y : 0.4260728 key_x : 0.24581124 score : 0.8029834}
+          landmarks {key_y : 0.49162248 key_x : 0.73743373 score : 0.8029834}
+          landmarks {key_y : 0.5530753 key_x : 0.6800778 score : 0.84395194}
+          landmarks {key_y : 0.3400389 key_x : 0.8849205 score : 0.8029834}
+          landmarks {key_y : 0.73333687 key_x : 0.7210463 score : 0.96685755}
+          landmarks {key_y : 0.27858606 key_x : 0.8685331 score : 0.6350124}
+          landmarks {key_y : 0.9299859 key_x : 0.7128526 score : 0.9422764}
+    )pb";
+
 // List of expected y coordinates of each keypoint
 std::vector<float> GOLDEN_KEY_Y = {0.31545776, 0.29907033, 0.3031672, 0.3031672, 0.30726406,0.3482326, 0.4096854, 0.30726406, 0.4260728, 
                                     0.2581018, 0.4260728, 0.49162248, 0.5530753, 0.34413573, 0.73333687, 0.27858606, 0.9299859};
@@ -86,26 +106,6 @@ StatusOr<ImageData> LoadImage(std::string image_name) {
 class CreateFromOptionsTest : public tflite_shims::testing::Test {};
 
 
-TEST_F(CreateFromOptionsTest, FailsWithTwoModelSources) {
-  LandmarkDetectorOptions options;
-
-  options.mutable_base_options()->mutable_model_file()->set_file_name(
-      JoinPath("./" /*test src dir*/, kTestDataDirectory,
-               kMobileNetFloatWithMetadata));
-
-  StatusOr<std::unique_ptr<LandmarkDetector>> landmark_detector_or =
-      LandmarkDetector::CreateFromOptions(options);
-
-  EXPECT_EQ(landmark_detector_or.status().code(),
-            absl::StatusCode::kInvalidArgument);
-  EXPECT_THAT(landmark_detector_or.status().message(),
-              HasSubstr("Expected exactly one of `base_options.model_file` or "
-                        "`model_file_with_metadata` to be provided, found 2."));
-  EXPECT_THAT(landmark_detector_or.status().GetPayload(kTfLiteSupportPayload),
-              Optional(absl::Cord(
-                  absl::StrCat(TfLiteSupportStatus::kInvalidArgumentError))));
-}
-
 TEST_F(CreateFromOptionsTest, FailsWithMissingModel) {
   LandmarkDetectorOptions options;
 
@@ -115,8 +115,8 @@ TEST_F(CreateFromOptionsTest, FailsWithMissingModel) {
   EXPECT_EQ(landmark_detector_or.status().code(),
             absl::StatusCode::kInvalidArgument);
   EXPECT_THAT(landmark_detector_or.status().message(),
-              HasSubstr("Expected exactly one of `base_options.model_file` or "
-                        "`model_file_with_metadata` to be provided, found 0."));
+              HasSubstr("Expected exactly one `base_options.model_file` "
+                        "to be provided, found 0."));
   EXPECT_THAT(landmark_detector_or.status().GetPayload(kTfLiteSupportPayload),
               Optional(absl::Cord(
                   absl::StrCat(TfLiteSupportStatus::kInvalidArgumentError))));
@@ -145,8 +145,8 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   const LandmarkResult& result = result_or.value();
 
   for (int i =0 ; i<num_keypoints ; ++i){
-    EXPECT_NEAR(result.landmarks(i).key_y(), GOLDEN_KEY_Y[i], 0.02);
-    EXPECT_NEAR(result.landmarks(i).key_x(), GOLDEN_KEY_X[i], 0.02);
+    EXPECT_NEAR(result.landmarks(i).key_y(), GOLDEN_KEY_Y[i], 0.03);
+    EXPECT_NEAR(result.landmarks(i).key_x(), GOLDEN_KEY_X[i], 0.03);
     EXPECT_NEAR(result.landmarks(i).score(), GOLDEN_SCORE[i], 0.52);
     
   }
