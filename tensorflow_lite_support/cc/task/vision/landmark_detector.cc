@@ -55,7 +55,7 @@ int num_keypoints = 17;
 /* static */
 StatusOr<std::unique_ptr<LandmarkDetector>> LandmarkDetector::CreateFromOptions(
     const LandmarkDetectorOptions& options) {
-  RETURN_IF_ERROR(SanityCheckOptions(options));
+  //RETURN_IF_ERROR(SanityCheckOptions(options));
 
   // Copy options to ensure the ExternalFile outlives the constructed object.
   auto options_copy = absl::make_unique<LandmarkDetectorOptions>(options);
