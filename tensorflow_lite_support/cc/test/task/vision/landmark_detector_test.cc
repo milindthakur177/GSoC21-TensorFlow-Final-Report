@@ -145,8 +145,8 @@ TEST_F(DetectTest, SucceedsWithFloatModel) {
   const LandmarkResult& result = result_or.value();
 
   for (int i =0 ; i<num_keypoints ; ++i){
-    EXPECT_NEAR(result.landmarks(i).key_y(), GOLDEN_KEY_Y[i], 0.03);
-    EXPECT_NEAR(result.landmarks(i).key_x(), GOLDEN_KEY_X[i], 0.03);
+    EXPECT_NEAR(result.landmarks(i).key_y(), GOLDEN_KEY_Y[i], 0.025);
+    EXPECT_NEAR(result.landmarks(i).key_x(), GOLDEN_KEY_X[i], 0.025);
     EXPECT_NEAR(result.landmarks(i).score(), GOLDEN_SCORE[i], 0.52);
     
   }
