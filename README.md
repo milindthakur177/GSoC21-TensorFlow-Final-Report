@@ -34,6 +34,17 @@ TensorFlow Lite Task Library contains easy-to-use task-specific libraries that a
 - [ ]  Create JAVA API
 - [ ]  Build Demo example
 
+## Contibutions
+Task Library: [Landmark Detection](https://github.com/tensorflow/tflite-support/tree/master/tensorflow_lite_support/cc/task/vision)
+| Description 	| PR Link                                            	| Status            	|
+|-------------	|-------------------------------------------------	|-------------------	|
+| added protos for landmark detector  	| # 	| merged            	|
+| added task library for landmark detection     	| # 	| merged            	|
+| added API for the landmark detector task library     	| # 	| merged            	|
+| added unit tests for the landmark detector   	| #	| merged            	|
+| added example usage for landmark detector API     	| #	| merged      	|
+
+
 ## Example Usage of the API
 
 An example of such model can be found at:
@@ -81,15 +92,6 @@ LandmarkResult result = result_or.value();
 // landmarks {key_y : 0.9299859 key_x : 0.7128526 score : 0.9422764}
 ```
 
-## Contibutions
-Task Library: [Landmark Detection](https://github.com/tensorflow/tflite-support/tree/master/tensorflow_lite_support/cc/task/vision)
-| Description 	| PR Link                                            	| Status            	|
-|-------------	|-------------------------------------------------	|-------------------	|
-| added protos for landmark detector  	| # 	| merged            	|
-| added task library for landmark detection     	| # 	| merged            	|
-| added API for the landmark detector task library     	| # 	| merged            	|
-| added unit tests for the landmark detector   	| #	| merged            	|
-| added example usage for landmark detector API     	| #	| merged      	|
 
 ## Final Thoughts
 
