@@ -6,7 +6,7 @@
 
 **Sub-Organization: [TensorFlow Lite](https://github.com/tensorflow/tflite-support)**
 
-**Project: [Generate a new Task Library in TensorFlow Lite for Pose Landmark Detection](https://github.com/tensorflow/tflite-support/tree/master/tensorflow_lite_support/cc/task/vision)**
+**Project: [Generate a new Task Library in TensorFlow Lite for Pose Landmark Detection](https://summerofcode.withgoogle.com/projects/#4573319526875136)**
 
 **Mentors: [Lu Wang](https://www.linkedin.com/in/lu-wang-21619a31/), [Meghna Natraj](https://www.linkedin.com/in/meghnanatraj/) and [George Soloupis](https://www.linkedin.com/in/george-soloupis/)**
 
@@ -35,14 +35,14 @@ TensorFlow Lite Task Library contains easy-to-use task-specific libraries that a
 - [ ]  Build Demo example
 
 ## Contibutions
-Task Library: [Landmark Detection](https://github.com/tensorflow/tflite-support/tree/master/tensorflow_lite_support/cc/task/vision)
-| Description 	| PR Link                                            	| Status            	|
-|-------------	|-------------------------------------------------	|-------------------	|
-| added protos for landmark detector  	| # 	| merged            	|
-| added task library for landmark detection     	| # 	| merged            	|
-| added API for the landmark detector task library     	| # 	| merged            	|
-| added unit tests for the landmark detector   	| #	| merged            	|
-| added example usage for landmark detector API     	| #	| merged      	|
+Task Library Pose Landmark Detection: [#664](https://github.com/tensorflow/tflite-support/pull/664)
+| Description | Status            	|
+|-------------	|-------------------	|
+| added protos for landmark detector  	| under review            	|
+| added task library for landmark detection     	| under review            	|
+| added API for the landmark detector task library     	| under review            	|
+| added unit tests for the landmark detector   | under review            	|
+| added example usage for landmark detector API     	| under review      	|
 
 
 ## Example Usage of the API
