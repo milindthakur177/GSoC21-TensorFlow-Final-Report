@@ -8,7 +8,7 @@
 
 **Project: [Generate a new Task Library in TensorFlow Lite for Pose Landmark Detection](https://summerofcode.withgoogle.com/projects/#4573319526875136)**
 
-**Mentors: [Lu Wang](https://www.linkedin.com/in/lu-wang-21619a31/), [Meghna Natraj](https://www.linkedin.com/in/meghnanatraj/) and [George Soloupis](https://www.linkedin.com/in/george-soloupis/)**
+**Mentors: [Lu Wang](https://www.linkedin.com/in/lu-wang-21619a31/)**
 
 ## Abstract
 
@@ -47,7 +47,7 @@ Pose Landmark Detection Task Library: [#664](https://github.com/tensorflow/tflit
 
 ## Example Usage of the API
 
-An example of such model can be found at:
+The MoveNet model can be found at:
 https://tfhub.dev/google/movenet/singlepose/lightning/4
 
 ```cc
@@ -95,7 +95,7 @@ LandmarkResult result = result_or.value();
 
 ## Final Thoughts
 
-I really enjoyed my time working with the TensorFlow team. I have learned a lot working on this project during the GSoC period. I would like to thank my mentors Lu, Meghna, and George for believing in me and helping me out whenever I got stuck. I would keep contributing to the project and the community with the things I have learned and would continue to learn. 
+I really enjoyed my time working with the TensorFlow team. I have learned a lot working on this project during the GSoC period. I would like to thank my mentors Lu, [Meghna Natraj](https://www.linkedin.com/in/meghnanatraj/), and [George Soloupis](https://www.linkedin.com/in/george-soloupis/) for believing in me and helping me out whenever I got stuck. I would keep contributing to the project and the community with the things I have learned and would continue to learn. 
 
 Lastly, I would like to thank Google for organizing such a great program.
 
