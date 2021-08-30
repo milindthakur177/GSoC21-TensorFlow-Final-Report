@@ -35,7 +35,7 @@ TensorFlow Lite Task Library contains easy-to-use task-specific libraries that a
 - [ ]  Build Demo example
 
 ## Contibutions
-Pose Landmark Detection Task Library: [#664](https://github.com/tensorflow/tflite-support/pull/664)
+Pose Landmark Detection Task Library: [#667](https://github.com/tensorflow/tflite-support/pull/667)
 | S/No.| Description | Status            	|
 |------|-------------	|-------------------	|
 |  1   |added protos for landmark detector  	| under review            	|
